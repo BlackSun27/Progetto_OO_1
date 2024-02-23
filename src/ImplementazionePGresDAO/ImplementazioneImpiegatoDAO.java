@@ -4,6 +4,7 @@ import ConnectDB.DbConn;
 import DAO.ImpiegatoDAO;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class ImplementazioneImpiegatoDAO implements ImpiegatoDAO {
     private DbConn db;
@@ -12,7 +13,7 @@ public class ImplementazioneImpiegatoDAO implements ImpiegatoDAO {
         db = new DbConn();
         try{
             c = db.conn_db("postgres", "postgres", "Blacks_27");
-        } catch (SQLException | ClassNotFoundException e){
+        } catch (SQLException e){
             e.printStackTrace();
         }
     }
@@ -60,5 +61,22 @@ public class ImplementazioneImpiegatoDAO implements ImpiegatoDAO {
         String query = "CALL inseriscipromozione(?)";
         CallableStatement stm = c.prepareCall(query);
         stm.setString(1, cf);
+    }
+
+    public void getAfferenzaLab(String cf, ArrayList<String> l_nomiLaboratori){
+        try{
+            String query = "SELECT nomelab FROM utilizza WHERE cf = ?";
+            PreparedStatement stm = c.prepareStatement(query);
+            stm.setString(1,cf);
+
+            ResultSet rs = stm.executeQuery();
+
+            while(rs.next())
+                l_nomiLaboratori.add(rs.getString(1));
+
+        }catch (SQLException e){
+            System.out.println("Errore a ottenere informazioni sulle afferenze!");
+            e.printStackTrace();
+        }
     }
 }

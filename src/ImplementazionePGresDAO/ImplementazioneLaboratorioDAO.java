@@ -5,7 +5,9 @@ import DAO.LaboratorioDAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class ImplementazioneLaboratorioDAO implements LaboratorioDAO {
     private DbConn db;
@@ -14,7 +16,7 @@ public class ImplementazioneLaboratorioDAO implements LaboratorioDAO {
         db = new DbConn();
         try {
             c = db.conn_db("postgres", "postgres", "Blacks_27");
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -48,5 +50,22 @@ public class ImplementazioneLaboratorioDAO implements LaboratorioDAO {
         stm.setString(1, cf);
         stm.setString(2, nomeLab);
         stm.executeUpdate();
+    }
+
+    public void afferenzeLab(String nomelab, ArrayList<String> l_CF){
+        try{
+            String query = "SELECT cf FROM utilizza WHERE nomelab = ?";
+            PreparedStatement stm = c.prepareStatement(query);
+            stm.setString(1,nomelab);
+
+            ResultSet rs = stm.executeQuery();
+
+            while(rs.next())
+                l_CF.add(rs.getString(1));
+
+        }catch (SQLException e){
+            System.out.println("Errore a ottenere informazioni sulle afferenze!");
+            e.printStackTrace();
+        }
     }
 }
