@@ -17,11 +17,12 @@ public class Impiegato {
 
     private ArrayList<Promozione> promozioni = new ArrayList<>();
 
-    public Impiegato(String cf, String nome, String cognome, Date dataAssunzione, String codiceCon,
-                     boolean merito, float salario, String categoria, int eta){
+    public Impiegato(String cf, String nome, String cognome, Date dataNascita, Date dataAssunzione,
+                     String codiceCon, boolean merito, float salario, String categoria, int eta){
         this.cf = cf;
         this.nome = nome;
         this.cognome = cognome;
+        this.dataNascita = dataNascita;
         this.dataAssunzione = dataAssunzione;
         this.codiceCon = codiceCon;
         this.merito = merito;

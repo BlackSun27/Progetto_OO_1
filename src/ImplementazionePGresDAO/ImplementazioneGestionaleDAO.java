@@ -18,6 +18,8 @@ public class ImplementazioneGestionaleDAO implements GestionaleDAO {
         }
     }
 
+    //l_ prima di ogni variabile fa riferimento al fatto che sia una lista, esempio: l_CF = lista codici fiscali
+
     @Override
     public void getImpiegati(ArrayList<String> l_CF, ArrayList<String> l_Nomi, ArrayList<String> l_Cognomi, ArrayList<Date> l_DateNascita, ArrayList<Date> l_DateAssunzioni, ArrayList<String> l_Contratti, ArrayList<Boolean> l_Merito, ArrayList<Float> l_Salari, ArrayList<String> l_Categorie, ArrayList<Integer> l_Eta) {
         try {
