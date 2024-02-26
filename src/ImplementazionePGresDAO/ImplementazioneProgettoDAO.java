@@ -53,23 +53,62 @@ public class ImplementazioneProgettoDAO implements ProgettoDAO {
         stm.executeUpdate();
     }
 
-    public void getProgLavora(String nomelab, ArrayList<String> l_CUP){
+    @Override
+    public void getProgResp(String cup, ArrayList<String> Cf_Resp){
         try{
-            String query = "SELECT cup FROM lavora WHERE lab1 = ? OR lab2 = ? OR lab3 = ?";
+            String query = "SELECT cf FROM progetto AS p JOIN impiegato ON " +
+                    "p.cf = i.cf WHERE p.cup = ? AND i.categoria = ?";
             PreparedStatement stm = c.prepareStatement(query);
-            stm.setString(1,nomelab);
-            stm.setString(2,nomelab);
-            stm.setString(3,nomelab);
+            stm.setString(1, cup);
+            stm.setString(2, "dirigente");
 
             ResultSet rs = stm.executeQuery();
 
             while(rs.next())
-                l_CUP.add(rs.getString(1));
+                Cf_Resp.add(rs.getString(1));
 
         }catch (SQLException e){
-            System.out.println("Errore a ottenere informazioni sulle afferenze!");
             e.printStackTrace();
         }
     }
 
+    @Override
+    public void getProgRef(String cup, ArrayList<String> Cf_Ref){
+        try{
+            String query = "SELECT cf FROM progetto AS p JOIN impiegato ON " +
+                    "p.cf = i.cf WHERE p.cup = ? AND i.categoria = ?";
+            PreparedStatement stm = c.prepareStatement(query);
+            stm.setString(1, cup);
+            stm.setString(2, "senior");
+
+            ResultSet rs = stm.executeQuery();
+
+            while(rs.next())
+                Cf_Ref.add(rs.getString(1));
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void getLabProg(String cup, ArrayList<String> l_Lab1, ArrayList<String> l_Lab2,
+                           ArrayList<String> l_Lab3){
+        try{
+            String query = "SELECT lab1, lab2, lab3 FROM lavora WHERE cup = ?";
+            PreparedStatement stm = c.prepareStatement(query);
+            stm.setString(1, cup);
+
+            ResultSet rs = stm.executeQuery();
+
+            while (rs.next()) {
+                l_Lab1.add(rs.getString(1));
+                l_Lab2.add(rs.getString(2));
+                l_Lab3.add(rs.getString(3));
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
 }

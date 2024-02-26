@@ -9,7 +9,7 @@ public class Progetto {
     private String nome;
     private float budget;
 
-    private ArrayList<Laboratorio> listaLab = new ArrayList<>();
+    private ArrayList<String> listaLab = new ArrayList<>();
 
     public Progetto(String cup, String ref_sci, String resp, String nome, float budget){
         this.cup = cup;
@@ -67,11 +67,11 @@ public class Progetto {
         listaLab.remove(lab);
     }
 
-    public void setListaLab(ArrayList<Laboratorio> listaLab) {
+    public void setListaLab(ArrayList<String> listaLab) {
         this.listaLab = listaLab;
     }
 
-    public ArrayList<Laboratorio> getListaLab() {
+    public ArrayList<String> getListaLab() {
         return listaLab;
     }
 }

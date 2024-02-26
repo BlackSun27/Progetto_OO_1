@@ -79,4 +79,51 @@ public class ImplementazioneImpiegatoDAO implements ImpiegatoDAO {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void getAfferenzeImp(String cf, ArrayList<String> l_Laboratori){
+        try {
+            String query = "SELECT nomelab FROM utilizza WHERE cf = ?";
+            PreparedStatement stm = c.prepareStatement(query);
+            stm.setString(1, cf);
+            ResultSet rs = stm.executeQuery();
+
+            while (rs.next())
+                l_Laboratori.add(rs.getString(1));
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void getProgettiLab(String cf, ArrayList<String> l_Progetti){
+        try {
+            String nomelab = "";
+            try {
+                String query = "SELECT nomelab FROM utilizza WHERE cf = ?";
+                PreparedStatement stm = c.prepareStatement(query);
+                stm.setString(1, cf);
+                ResultSet rs = stm.executeQuery();
+
+                while (rs.next())
+                    nomelab = rs.getString(1);
+
+            } catch (SQLException e) {
+                nomelab = "";
+                e.printStackTrace();
+            }
+            String query = "SELECT cup FROM lavora WHERE lab1 = ? OR lab2 = ? OR lab3 = ?";
+            PreparedStatement stm = c.prepareStatement(query);
+            stm.setString(1, nomelab);
+            stm.setString(2, nomelab);
+            stm.setString(3, nomelab);
+
+            ResultSet rs = stm.executeQuery();
+
+            while (rs.next())
+                l_Progetti.add(rs.getString(1));
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
 }

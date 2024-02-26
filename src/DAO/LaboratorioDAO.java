@@ -1,6 +1,7 @@
 package DAO;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public interface LaboratorioDAO {
 
@@ -12,5 +13,9 @@ public interface LaboratorioDAO {
     public void aggiungiAfferente(String nomeLab, String cf) throws SQLException;
 
 
+    void afferenzeLab(String nomelab, ArrayList<String> l_CF);
 
+    void getRespSci(String nomelab, ArrayList<String> Cf_Resp);
+
+    void getProgLavora(String nomelab, ArrayList<String> l_CUP);
 }
