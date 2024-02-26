@@ -106,6 +106,257 @@ public class Controller {
     }
 
     //METODI PER SVILUPPARE LA GUI DI IMPIEGATO
+    public ArrayList<String> getListaCF(){
+        ArrayList<String> l_CF = new ArrayList<>();
 
+        for(Impiegato i : l_Impiegati)
+            l_CF.add(i.getCf());
+
+        return l_CF;
+    }
+
+    public ArrayList<String> getListaNomi(){
+        ArrayList<String> l_Nomi = new ArrayList<>();
+
+        for(Impiegato i : l_Impiegati)
+            l_Nomi.add(i.getNome());
+
+        return l_Nomi;
+    }
+
+    public ArrayList<String> getListaCognomi(){
+        ArrayList<String> l_Cognomi = new ArrayList<>();
+
+        for(Impiegato i : l_Impiegati)
+            l_Cognomi.add(i.getCognome());
+
+        return l_Cognomi;
+    }
+
+    public Impiegato getListaPromozioni(String cf){
+        ArrayList<Promozione> l_PromozioniImp = new ArrayList<>();
+
+        for(Promozione p : l_PromozioniImp){
+            if(p.getCf().equals(cf))
+                l_PromozioniImp.add(p);
+        }
+
+        for(Impiegato i : l_Impiegati){
+            if(Objects.equals(cf, i.getCf())){
+                i.setPromozioni(l_PromozioniImp);
+                return i;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<String> getAfferenzeImp(String cf){
+        ImpiegatoDAO impiegatoDAO = new ImplementazioneImpiegatoDAO();
+
+        Impiegato impiegato = null;
+
+        for(Impiegato i : l_Impiegati){
+            if(i.getCf().equals(cf))
+                impiegato = i;
+            break;
+        }
+
+        ArrayList<String> l_LaboratoriAff = new ArrayList<>();
+        impiegatoDAO.getAfferenzeImp(cf, l_LaboratoriAff);
+
+        if(impiegato != null) {
+            impiegato.setLaboratori(l_LaboratoriAff);
+            return l_LaboratoriAff;
+        }
+
+        return null;
+    }
+
+    public ArrayList<String> getProgettiImp(String cf){
+        ImpiegatoDAO impiegatoDAO = new ImplementazioneImpiegatoDAO();
+
+        Impiegato impiegato = null;
+
+        for(Impiegato i : l_Impiegati){
+            if(i.getCf().equals(cf))
+                impiegato = i;
+            break;
+        }
+
+        ArrayList<String> l_ProgettiAff = new ArrayList<>();
+        impiegatoDAO.getAfferenzeImp(cf, l_ProgettiAff);
+
+        if(impiegato != null) {
+            impiegato.setProgetti(l_ProgettiAff);
+            return l_ProgettiAff;
+        }
+
+        return null;
+    }
+
+    public void aggiungiImp(String cf, String nome, String cognome, Date dataNascita, Date dataAssunzione,
+                            String codiceCon, boolean merito, float salario, String categoria, int eta){
+
+        ImpiegatoDAO impiegatoDAO = new ImplementazioneImpiegatoDAO();
+
+        if(merito) {
+            categoria = "Dirigente";
+            impiegatoDAO.inserisciImpiegato(cf, nome, cognome, dataNascita,
+                    dataAssunzione, codiceCon, merito, salario, categoria, eta);
+        }else
+            impiegatoDAO.inserisciImpiegato(cf, nome, cognome, dataNascita,
+                    dataAssunzione, codiceCon, merito, salario, categoria, eta);
+
+        l_Impiegati.clear();
+        getImpiegatiDB();
+    }
+
+    public void rimuoviImp(String cf){
+        ImpiegatoDAO impiegatoDAO = new ImplementazioneImpiegatoDAO();
+
+        impiegatoDAO.rimuoviImpiegato(cf);
+
+        l_Impiegati.removeIf(i -> i.getCf().equals(cf));
+    }
+
+    public void promuoviImp(String cf, String codicecon, boolean merito){
+        ImpiegatoDAO impiegatoDAO = new ImplementazioneImpiegatoDAO();
+
+        impiegatoDAO.promuoviImpiegato(cf,codicecon,merito);
+
+        l_Impiegati.clear();
+        getImpiegatiDB();
+    }
+
+    //METODI PER SVILUPPARE LA GUI DI LABORATORIO
+    public ArrayList<String> getNomiLab(){
+        ArrayList<String> l_Nomi = new ArrayList<>();
+
+        for(Laboratorio l : l_Laboratori)
+            l_Nomi.add(l.getNome());
+
+        return l_Nomi;
+    }
+
+    public ArrayList<String> getRespSciLab(){
+        ArrayList<String> l_RespSci = new ArrayList<>();
+
+        for(Laboratorio l : l_Laboratori)
+            l_RespSci.add(l.getResp_sci());
+
+        return l_RespSci;
+    }
+
+    public ArrayList<String> getTopicLab(){
+        ArrayList<String> l_Topic = new ArrayList<>();
+
+        for(Laboratorio l : l_Laboratori)
+            l_Topic.add(l.getTopic());
+
+        return l_Topic;
+    }
+
+    public ArrayList<Integer> getN_Afferenti(){
+        ArrayList<Integer> l_Afferenti = new ArrayList<>();
+
+        for(Laboratorio l : l_Laboratori)
+            l_Afferenti.add(l.getN_afferenti());
+
+        return l_Afferenti;
+    }
+
+    public ArrayList<String> getRespSciLab(String nome) {
+        LaboratorioDAO laboratorioDAO = new ImplementazioneLaboratorioDAO();
+
+        Laboratorio laboratorio = null;
+
+        for (Laboratorio l : l_Laboratori) {
+            if (l.getNome().equals(nome))
+                laboratorio = l;
+            break;
+        }
+
+        ArrayList<String> l_ImpiegatiAff = new ArrayList<>();
+        laboratorioDAO.getRespSci(nome, l_ImpiegatiAff);
+
+        if (laboratorio != null) {
+            laboratorio.setListAfferenti(l_ImpiegatiAff);
+            return l_ImpiegatiAff;
+        }
+
+        return null;
+    }
+
+    public ArrayList<String> getAfferenzeLab(String nome) {
+        LaboratorioDAO laboratorioDAO = new ImplementazioneLaboratorioDAO();
+
+        Laboratorio laboratorio = null;
+
+        for (Laboratorio l : l_Laboratori) {
+            if (l.getNome().equals(nome))
+                laboratorio = l;
+            break;
+        }
+
+        ArrayList<String> l_Afferenti = new ArrayList<>();
+        laboratorioDAO.afferenzeLab(nome, l_Afferenti);
+
+        if (laboratorio != null) {
+            laboratorio.setListAfferenti(l_Afferenti);
+            return l_Afferenti;
+        }
+
+        return null;
+    }
+
+    public ArrayList<String> getCUP(String nome) {
+        LaboratorioDAO laboratorioDAO = new ImplementazioneLaboratorioDAO();
+
+        Laboratorio laboratorio = null;
+
+        for (Laboratorio l : l_Laboratori) {
+            if (l.getNome().equals(nome))
+                laboratorio = l;
+            break;
+        }
+
+        ArrayList<String> l_ProgettiCup = new ArrayList<>();
+        laboratorioDAO.getProgLavora(nome, l_ProgettiCup);
+
+        if (laboratorio != null) {
+            laboratorio.setListaCup(l_ProgettiCup);
+            return l_ProgettiCup;
+        }
+
+        return null;
+    }
+
+    public void aggiungiLab(String nomeLab, String respSci, String topic, int n_Afferenti){
+        LaboratorioDAO laboratorioDAO = new ImplementazioneLaboratorioDAO();
+
+        laboratorioDAO.inserisciLaboratorio(nomeLab, respSci, topic, n_Afferenti);
+
+        l_Laboratori.clear();
+        getLaboratoriDB();
+    }
+
+    public void rimuoviLab(String nome){
+        LaboratorioDAO laboratorioDAO = new ImplementazioneLaboratorioDAO();
+
+        laboratorioDAO.rimuoviLaboratorio(nome);
+
+        l_Laboratori.removeIf(l -> l.getNome().equals(nome));
+    }
+
+    public void aggiungiAfferenteLab(String nome, String cf){
+        LaboratorioDAO laboratorioDAO = new ImplementazioneLaboratorioDAO();
+
+        laboratorioDAO.aggiungiAfferente(nome, cf);
+
+        l_Laboratori.clear();
+        getLaboratoriDB();
+    }
+
+    //METODI PER SVILUPPARE LA GUI DI PROGETTO
 
 }

@@ -52,6 +52,7 @@ public class ImplementazioneLaboratorioDAO implements LaboratorioDAO {
         stm.executeUpdate();
     }
 
+    @Override
     public void afferenzeLab(String nomelab, ArrayList<String> l_CF){
         try{
             String query = "SELECT cf FROM utilizza WHERE nomelab = ?";
@@ -62,6 +63,45 @@ public class ImplementazioneLaboratorioDAO implements LaboratorioDAO {
 
             while(rs.next())
                 l_CF.add(rs.getString(1));
+
+        }catch (SQLException e){
+            System.out.println("Errore a ottenere informazioni sulle afferenze!");
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void getRespSci(String nomelab, ArrayList<String> Cf_Resp){
+        try{
+            String query = "SELECT cf FROM Utilizza AS u JOIN Impiegato AS i ON u.cf = i.cf " +
+                    "WHERE i.categoria = ? AND u.cf = ?";
+            PreparedStatement stm = c.prepareStatement(query);
+            stm.setString(1, "senior");
+            stm.setString(2, nomelab);
+
+            ResultSet rs = stm.executeQuery();
+
+            while(rs.next())
+                Cf_Resp.add(rs.getString(1));
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void getProgLavora(String nomelab, ArrayList<String> l_CUP){
+        try{
+            String query = "SELECT cup FROM lavora WHERE lab1 = ? OR lab2 = ? OR lab3 = ?";
+            PreparedStatement stm = c.prepareStatement(query);
+            stm.setString(1,nomelab);
+            stm.setString(2,nomelab);
+            stm.setString(3,nomelab);
+
+            ResultSet rs = stm.executeQuery();
+
+            while(rs.next())
+                l_CUP.add(rs.getString(1));
 
         }catch (SQLException e){
             System.out.println("Errore a ottenere informazioni sulle afferenze!");

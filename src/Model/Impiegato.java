@@ -17,6 +17,10 @@ public class Impiegato {
 
     private ArrayList<Promozione> promozioni = new ArrayList<>();
 
+    private ArrayList<String> laboratori = new ArrayList<>();
+
+    private ArrayList<String> progetti = new ArrayList<>();
+
     public Impiegato(String cf, String nome, String cognome, Date dataNascita, Date dataAssunzione,
                      String codiceCon, boolean merito, float salario, String categoria, int eta){
         this.cf = cf;
@@ -113,5 +117,12 @@ public class Impiegato {
     public ArrayList<Promozione> getPromozioni() {
         return promozioni;
     }
+
+    public void setLaboratori(ArrayList<String> laboratori){this.laboratori = laboratori;}
+    public ArrayList<String> getLaboratori(){return laboratori;}
+
+    public void setProgetti(ArrayList<String> progetti){this.progetti = progetti;}
+
+    public ArrayList<String> getProgetti(){return progetti;}
 
 }
