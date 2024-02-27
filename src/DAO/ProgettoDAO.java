@@ -17,4 +17,7 @@ public interface ProgettoDAO {
     void getProgRef(String cup, ArrayList<String> Cf_Ref);
 
     void getLabProg(String cup, ArrayList<String> l_Laboratori);
+
+    void getLabProg(String cup, ArrayList<String> l_Lab1, ArrayList<String> l_Lab2,
+                    ArrayList<String> l_Lab3);
 }
