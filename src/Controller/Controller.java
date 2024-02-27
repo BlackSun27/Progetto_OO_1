@@ -115,7 +115,7 @@ public class Controller {
         return l_CF;
     }
 
-    public ArrayList<String> getListaNomi(){
+    public ArrayList<String> getListaNomiImp(){
         ArrayList<String> l_Nomi = new ArrayList<>();
 
         for(Impiegato i : l_Impiegati)
@@ -195,7 +195,7 @@ public class Controller {
     }
 
     public void aggiungiImp(String cf, String nome, String cognome, Date dataNascita, Date dataAssunzione,
-                            String codiceCon, boolean merito, float salario, String categoria, int eta){
+                            String codiceCon, boolean merito, float salario, String categoria, int eta) throws SQLException {
 
         ImpiegatoDAO impiegatoDAO = new ImplementazioneImpiegatoDAO();
 
@@ -211,7 +211,7 @@ public class Controller {
         getImpiegatiDB();
     }
 
-    public void rimuoviImp(String cf){
+    public void rimuoviImp(String cf) throws SQLException {
         ImpiegatoDAO impiegatoDAO = new ImplementazioneImpiegatoDAO();
 
         impiegatoDAO.rimuoviImpiegato(cf);
@@ -219,7 +219,7 @@ public class Controller {
         l_Impiegati.removeIf(i -> i.getCf().equals(cf));
     }
 
-    public void promuoviImp(String cf, String codicecon, boolean merito){
+    public void promuoviImp(String cf, String codicecon, boolean merito) throws SQLException {
         ImpiegatoDAO impiegatoDAO = new ImplementazioneImpiegatoDAO();
 
         impiegatoDAO.promuoviImpiegato(cf,codicecon,merito);
@@ -229,7 +229,7 @@ public class Controller {
     }
 
     //METODI PER SVILUPPARE LA GUI DI LABORATORIO
-    public ArrayList<String> getNomiLab(){
+    public ArrayList<String> getListaNomiLab(){
         ArrayList<String> l_Nomi = new ArrayList<>();
 
         for(Laboratorio l : l_Laboratori)
@@ -238,7 +238,7 @@ public class Controller {
         return l_Nomi;
     }
 
-    public ArrayList<String> getRespSciLab(){
+    public ArrayList<String> getListaRespSci(){
         ArrayList<String> l_RespSci = new ArrayList<>();
 
         for(Laboratorio l : l_Laboratori)
@@ -247,7 +247,7 @@ public class Controller {
         return l_RespSci;
     }
 
-    public ArrayList<String> getTopicLab(){
+    public ArrayList<String> getListaTopicLab(){
         ArrayList<String> l_Topic = new ArrayList<>();
 
         for(Laboratorio l : l_Laboratori)
@@ -256,7 +256,7 @@ public class Controller {
         return l_Topic;
     }
 
-    public ArrayList<Integer> getN_Afferenti(){
+    public ArrayList<Integer> getListaN_Afferenti(){
         ArrayList<Integer> l_Afferenti = new ArrayList<>();
 
         for(Laboratorio l : l_Laboratori)
@@ -309,7 +309,7 @@ public class Controller {
         return null;
     }
 
-    public ArrayList<String> getCUP(String nome) {
+    public ArrayList<String> getCUPfromLab(String nome) {
         LaboratorioDAO laboratorioDAO = new ImplementazioneLaboratorioDAO();
 
         Laboratorio laboratorio = null;
@@ -331,7 +331,7 @@ public class Controller {
         return null;
     }
 
-    public void aggiungiLab(String nomeLab, String respSci, String topic, int n_Afferenti){
+    public void aggiungiLab(String nomeLab, String respSci, String topic, int n_Afferenti) throws SQLException {
         LaboratorioDAO laboratorioDAO = new ImplementazioneLaboratorioDAO();
 
         laboratorioDAO.inserisciLaboratorio(nomeLab, respSci, topic, n_Afferenti);
@@ -340,7 +340,7 @@ public class Controller {
         getLaboratoriDB();
     }
 
-    public void rimuoviLab(String nome){
+    public void rimuoviLab(String nome) throws SQLException {
         LaboratorioDAO laboratorioDAO = new ImplementazioneLaboratorioDAO();
 
         laboratorioDAO.rimuoviLaboratorio(nome);
@@ -348,7 +348,7 @@ public class Controller {
         l_Laboratori.removeIf(l -> l.getNome().equals(nome));
     }
 
-    public void aggiungiAfferenteLab(String nome, String cf){
+    public void aggiungiAfferenteLab(String nome, String cf) throws SQLException {
         LaboratorioDAO laboratorioDAO = new ImplementazioneLaboratorioDAO();
 
         laboratorioDAO.aggiungiAfferente(nome, cf);
@@ -358,5 +358,139 @@ public class Controller {
     }
 
     //METODI PER SVILUPPARE LA GUI DI PROGETTO
+    public ArrayList<String> getListaCUP(){
+        ArrayList<String> l_CUP = new ArrayList<>();
 
+        for(Progetto p : l_Progetti)
+            l_CUP.add(p.getCup());
+
+        return l_CUP;
+    }
+
+    public ArrayList<String> getListaRefSci(){
+        ArrayList<String> l_RefSci = new ArrayList<>();
+
+        for(Progetto p : l_Progetti)
+            l_RefSci.add(p.getRef_sci());
+
+        return l_RefSci;
+    }
+
+    public ArrayList<String> getListaResp(){
+        ArrayList<String> l_Resp = new ArrayList<>();
+
+        for(Progetto p : l_Progetti)
+            l_Resp.add(p.getResp());
+
+        return l_Resp;
+    }
+
+    public ArrayList<String> getListaNomiProg(){
+        ArrayList<String> l_Nomi = new ArrayList<>();
+
+        for(Progetto p : l_Progetti)
+            l_Nomi.add(p.getNome());
+
+        return l_Nomi;
+    }
+
+    public ArrayList<String> getLabFromCUP(String cup) {
+        ProgettoDAO progettoDAO = new ImplementazioneProgettoDAO();
+
+        Progetto progetto = null;
+
+        for (Progetto p : l_Progetti) {
+            if (p.getCup().equals(cup))
+                progetto = p;
+            break;
+        }
+
+        ArrayList<String> l_Lab1 = new ArrayList<>();
+        ArrayList<String> l_Lab2 = new ArrayList<>();
+        ArrayList<String> l_Lab3 = new ArrayList<>();
+        progettoDAO.getLabProg(cup, l_Lab1, l_Lab2, l_Lab3);
+
+        ArrayList<String> listaLab = new ArrayList<>();
+        listaLab.addAll(l_Lab1);
+        listaLab.addAll(l_Lab2);
+        listaLab.addAll(l_Lab3);
+
+        if (progetto != null) {
+            progetto.setListaLab(listaLab);
+            return listaLab;
+        }
+
+        return null;
+    }
+
+    public ArrayList<String> getRespFromCUP(String cup) {
+        ProgettoDAO progettoDAO = new ImplementazioneProgettoDAO();
+
+        Progetto progetto = null;
+
+        for (Progetto p : l_Progetti) {
+            if (p.getCup().equals(cup))
+                progetto = p;
+            break;
+        }
+
+        ArrayList<String> l_Resp = new ArrayList<>();
+        progettoDAO.getProgResp(cup, l_Resp);
+
+        if (progetto != null) {
+            progetto.setListaResp(l_Resp);
+            return l_Resp;
+        }
+
+        return null;
+    }
+
+    public ArrayList<String> getRefFromCUP(String cup) {
+        ProgettoDAO progettoDAO = new ImplementazioneProgettoDAO();
+
+        Progetto progetto = null;
+
+        for (Progetto p : l_Progetti) {
+            if (p.getCup().equals(cup))
+                progetto = p;
+            break;
+        }
+
+        ArrayList<String> l_RefSci = new ArrayList<>();
+        progettoDAO.getLabProg(cup, l_RefSci);
+
+        if (progetto != null) {
+            progetto.setListaRefSci(l_RefSci);
+            return l_RefSci;
+        }
+
+        return null;
+    }
+
+    public void aggiungiProgetto(String cup, String refSci, String resp, String nome, float budget)
+        throws SQLException{
+        ProgettoDAO progettoDAO = new ImplementazioneProgettoDAO();
+
+        progettoDAO.inserisciProgetto(cup, refSci, resp, nome, budget);
+
+        l_Progetti.clear();
+        getProgettiDB();
+    }
+
+    public void rimuoviProgetto(String cup) throws SQLException{
+        ProgettoDAO progettoDAO = new ImplementazioneProgettoDAO();
+
+        progettoDAO.rimuoviProgetto(cup);
+
+        l_Progetti.removeIf(p -> p.getCup().equals(cup));
+    }
+
+    public void aggiungiLaboratorio(String cup, String nomelab) throws SQLException{
+        ProgettoDAO progettoDAO = new ImplementazioneProgettoDAO();
+
+        progettoDAO.aggiungiLaboratorio(cup, nomelab);
+
+        l_Progetti.clear();
+        getProgettiDB();
+    }
 }

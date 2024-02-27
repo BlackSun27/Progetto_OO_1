@@ -10,6 +10,8 @@ public class Progetto {
     private float budget;
 
     private ArrayList<String> listaLab = new ArrayList<>();
+    private ArrayList<String> listaResp = new ArrayList<>();
+    private ArrayList<String> listaRefSci = new ArrayList<>();
 
     public Progetto(String cup, String ref_sci, String resp, String nome, float budget){
         this.cup = cup;
@@ -59,7 +61,7 @@ public class Progetto {
         return budget;
     }
 
-    public void aggiungiLab(Laboratorio lab) {
+    public void aggiungiLab(String lab) {
         listaLab.add(lab);
     }
 
@@ -73,5 +75,21 @@ public class Progetto {
 
     public ArrayList<String> getListaLab() {
         return listaLab;
+    }
+
+    public void setListaRefSci(ArrayList<String> listaRefSci) {
+        this.listaRefSci = listaRefSci;
+    }
+
+    public ArrayList<String> getListaRefSci() {
+        return listaRefSci;
+    }
+
+    public void setListaResp(ArrayList<String> listaResp) {
+        this.listaResp = listaResp;
+    }
+
+    public ArrayList<String> getListaResp() {
+        return listaResp;
     }
 }
