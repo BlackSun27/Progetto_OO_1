@@ -25,7 +25,7 @@ public class Controller {
         getProgettiDB();
     }
 
-    public void getImpiegatiDB(){
+    public List<Impiegato> getImpiegatiDB(){
         GestionaleDAO gestionaleDAO = new ImplementazioneGestionaleDAO();
 
         ArrayList<String> l_CF = new ArrayList<>();
@@ -48,9 +48,10 @@ public class Controller {
                     l_DateNascita.get(i), l_DateAssunzioni.get(i), l_Contratti.get(i), l_Merito.get(i),
                     l_Salari.get(i), l_Categorie.get(i), l_Eta.get(i)));
         }
+        return l_Impiegati;
     }
 
-    public void getLaboratoriDB(){
+    public List<Laboratorio> getLaboratoriDB(){
         GestionaleDAO gestionaleDAO = new ImplementazioneGestionaleDAO();
 
         ArrayList<String> l_Nomi = new ArrayList<>();
@@ -65,10 +66,10 @@ public class Controller {
             l_Laboratori.add(new Laboratorio(l_Nomi.get(i), l_RespSci.get(i), l_Topic.get(i),
                     l_NumeroAfferenti.get(i)));
         }
-
+        return l_Laboratori;
     }
 
-    public void getPromozioniDB(){
+    public List<Promozione> getPromozioniDB(){
         GestionaleDAO gestionaleDAO = new ImplementazioneGestionaleDAO();
 
         ArrayList<String> l_CF = new ArrayList<>();
@@ -84,10 +85,10 @@ public class Controller {
             l_Promozioni.add(new Promozione(l_CF.get(i), l_DatePassaggio.get(i), l_Contratti.get(i),
                     l_VecchieCategorie.get(i), l_NuoveCategorie.get(i)));
 
-
+        return l_Promozioni;
     }
 
-    public void getProgettiDB(){
+    public List<Progetto> getProgettiDB(){
         GestionaleDAO gestionaleDAO = new ImplementazioneGestionaleDAO();
 
         ArrayList<String> l_CUP = new ArrayList<>();
@@ -103,6 +104,8 @@ public class Controller {
         for(; i<l_CUP.size(); i++)
             l_Progetti.add(new Progetto(l_CUP.get(i), l_RefSci.get(i), l_Resp.get(i),
                     l_Nomi.get(i), l_Budget.get(i)));
+
+        return l_Progetti;
     }
 
     //METODI PER SVILUPPARE LA GUI DI IMPIEGATO
@@ -219,10 +222,10 @@ public class Controller {
         l_Impiegati.removeIf(i -> i.getCf().equals(cf));
     }
 
-    public void promuoviImp(String cf, String codicecon, boolean merito) throws SQLException {
+    public void promuoviImp(String cf, boolean merito) throws SQLException {
         ImpiegatoDAO impiegatoDAO = new ImplementazioneImpiegatoDAO();
 
-        impiegatoDAO.promuoviImpiegato(cf,codicecon,merito);
+        impiegatoDAO.promuoviImpiegato(cf,merito);
 
         l_Impiegati.clear();
         getImpiegatiDB();

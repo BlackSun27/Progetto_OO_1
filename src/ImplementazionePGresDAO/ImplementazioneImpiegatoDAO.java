@@ -47,13 +47,12 @@ public class ImplementazioneImpiegatoDAO implements ImpiegatoDAO {
     }
 
     @Override
-    public void promuoviImpiegato(String cf, String codiceCon, boolean merito) throws SQLException{
+    public void promuoviImpiegato(String cf, boolean merito) throws SQLException{
         if(merito) {
-            String upMerito = "UPDATE Impiegato SET merito = ? WHERE cf = ? AND codicecon = ?";
+            String upMerito = "UPDATE Impiegato SET merito = ? WHERE cf = ?";
             try (PreparedStatement stm = c.prepareStatement(upMerito)) {
                 stm.setString(1, String.valueOf(merito));
                 stm.setString(2, cf);
-                stm.setString(3, codiceCon);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
