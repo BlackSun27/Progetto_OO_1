@@ -11,7 +11,7 @@ public interface ImpiegatoDAO {
 
     public void rimuoviImpiegato(String cf) throws SQLException;
 
-    public void promuoviImpiegato(String cf, String codiceCon, boolean merito) throws SQLException;
+    public void promuoviImpiegato(String cf, boolean merito) throws SQLException;
 
     public void getAfferenzeImp(String cf, ArrayList<String> l_Laboratori);
 
