@@ -77,7 +77,7 @@ public class ImplementazioneGestionaleDAO implements GestionaleDAO {
 
             while(rs.next()){
                 l_Nomi.add(rs.getString("nome"));
-                l_RespSci.add(rs.getString("respsci"));
+                l_RespSci.add(rs.getString("respscie"));
                 l_Topic.add(rs.getString("topic"));
                 l_NumeroAfferenti.add(rs.getInt("n_afferenti"));
             }
@@ -92,14 +92,14 @@ public class ImplementazioneGestionaleDAO implements GestionaleDAO {
     @Override
     public void getProgetti(ArrayList<String> l_CUP, ArrayList<String> l_RefSci, ArrayList<String> l_Resp, ArrayList<String> l_Nomi, ArrayList<Float> l_Budget) {
         try{
-            String query = "SELECT * FROM promozione";
+            String query = "SELECT * FROM progetto";
             PreparedStatement stm = c.prepareStatement(query);
             ResultSet rs = stm.executeQuery();
 
             while(rs.next()){
                 l_CUP.add(rs.getString("cup"));
-                l_RefSci.add(rs.getString("refsci"));
-                l_Resp.add(rs.getString("resp"));
+                l_RefSci.add(rs.getString("refscie"));
+                l_Resp.add(rs.getString("respscie"));
                 l_Nomi.add(rs.getString("nome"));
                 l_Budget.add(rs.getFloat("budget"));
             }

@@ -7,6 +7,8 @@ import javax.swing.*;
 import javax.swing.table.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Vector;
@@ -17,7 +19,7 @@ public class ImpiegatoGUI {
     private JPanel impiegatoMainPanel;
     private JPanel impiegatoPanel;
     private JButton backBtn;
-    private JFrame frame;
+    JFrame frame;
     private JButton addBtn;
     private JButton removeBtn;
     private JButton promuoviBtn;
@@ -30,6 +32,7 @@ public class ImpiegatoGUI {
     private JPanel profilePanel;
 
     public ImpiegatoGUI(Controller controller, JFrame prevFrame){
+        impiegatoMainPanel = new JPanel();
         frame = new JFrame("Impiegati");
         frame.setSize(1280, 720);
         frame.setResizable(false);
@@ -64,6 +67,7 @@ public class ImpiegatoGUI {
             }
         };
 
+        impTable = new JTable();
         impTable.setModel(dtm);
         impTable.setRowHeight(30);
         impTable.getTableHeader().setReorderingAllowed(false);
@@ -111,14 +115,22 @@ public class ImpiegatoGUI {
 
             }
         });
-
+        backBtn = new JButton("Torna alla Home");
         backBtn.addActionListener(e->{
             prevFrame.setVisible(true);
             frame.dispose();
         });
 
-        addBtn.addActionListener(e->{
 
+
+        addBtn.addActionListener(e->{
+            AddImpiegatoGUI addImpiegatoGUI = new AddImpiegatoGUI(controller);
+            addImpiegatoGUI.frame.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    ricaricaTabella(controller, colonne);
+                }
+            });
         });
 
         removeBtn.addActionListener(e->{
@@ -168,60 +180,6 @@ public class ImpiegatoGUI {
 
             }
         });
-
-
-
-        /*impiegatoButton = new JButton("Impiegato");
-        promozioneButton = new JButton("Promozione");
-        laboratorioButton = new JButton("Laboratorio");
-        utilizzaButton = new JButton("Utilizza");
-        progettoButton = new JButton("Progetto");
-        lavoraButton = new JButton("Lavora");
-
-        JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        buttonsPanel.add(impiegatoButton);
-        buttonsPanel.add(promozioneButton);
-        buttonsPanel.add(laboratorioButton);
-        buttonsPanel.add(utilizzaButton);
-        buttonsPanel.add(progettoButton);
-        buttonsPanel.add(lavoraButton);
-
-        JPanel pannelloInf = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 6;
-        gbc.insets = new Insets(10, 0, 0, 0);
-        gbc.anchor = GridBagConstraints.PAGE_START;
-        pannelloInf.add(labelScelta, gbc);
-
-        gbc.gridy = 1;
-        gbc.gridwidth = 1;
-        gbc.insets = new Insets(10, 5, 0, 5);
-        pannelloInf.add(impiegatoButton, gbc);
-
-        gbc.gridx = 1;
-        pannelloInf.add(promozioneButton, gbc);
-
-        gbc.gridx = 2;
-        pannelloInf.add(laboratorioButton, gbc);
-
-        gbc.gridx = 3;
-        pannelloInf.add(utilizzaButton, gbc);
-
-        gbc.gridx = 4;
-        pannelloInf.add(progettoButton, gbc);
-
-        gbc.gridx = 5;
-        pannelloInf.add(lavoraButton, gbc);
-
-        Border compoundBorder = BorderFactory.createCompoundBorder(
-                BorderFactory.createEmptyBorder(),
-                BorderFactory.createEmptyBorder(10, 10, 10, 10)
-        );
-
-        buttonsPanel.setBorder(compoundBorder);*/
     }
 
     private void ricaricaTabella(Controller controller, String[] colonne){
