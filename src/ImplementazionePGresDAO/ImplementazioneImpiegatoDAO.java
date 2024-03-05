@@ -28,10 +28,10 @@ public class ImplementazioneImpiegatoDAO implements ImpiegatoDAO {
         stm.setString(1, cf);
         stm.setString(2, nome);
         stm.setString(3, cognome);
-        stm.setString(4, String.valueOf(dataNascita));
+        stm.setDate(4, dataNascita);
         stm.setBoolean(5, merito);
         stm.setString(6, codiceCon);
-        stm.setString(7, String.valueOf(dataAssunzione));
+        stm.setDate(7, dataAssunzione);
         stm.setString(8, categoria);
         stm.setDouble(9, salario);
 

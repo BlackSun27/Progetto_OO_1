@@ -44,7 +44,10 @@ public class Controller {
 
         int i=0;
         for(; i<l_CF.size(); i++){
-            l_Impiegati.add(new Impiegato(l_CF.get(i), l_Nomi.get(i), l_Cognomi.get(i),
+            if(i<l_Nomi.size() && i<l_Cognomi.size() && i<l_DateNascita.size() && i<l_DateAssunzioni.size()
+            && i<l_Contratti.size() && i<l_Merito.size() && i<l_Salari.size() && i<l_Categorie.size() &&
+            i<l_Eta.size())
+                l_Impiegati.add(new Impiegato(l_CF.get(i), l_Nomi.get(i), l_Cognomi.get(i),
                     l_DateNascita.get(i), l_DateAssunzioni.get(i), l_Contratti.get(i), l_Merito.get(i),
                     l_Salari.get(i), l_Categorie.get(i), l_Eta.get(i)));
         }
@@ -460,7 +463,7 @@ public class Controller {
         }
 
         ArrayList<String> l_RefSci = new ArrayList<>();
-        progettoDAO.getLabProg(cup, l_RefSci);
+        progettoDAO.getProgRef(cup, l_RefSci);
 
         if (progetto != null) {
             progetto.setListaRefSci(l_RefSci);

@@ -12,12 +12,10 @@ public interface ProgettoDAO {
 
     public void aggiungiLaboratorio(String cup, String nomeLab) throws SQLException;
 
-    void getProgResp(String cup, ArrayList<String> Cf_Resp);
+    public void getProgResp(String cup, ArrayList<String> Cf_Resp);
 
-    void getProgRef(String cup, ArrayList<String> Cf_Ref);
+    public void getProgRef(String cup, ArrayList<String> Cf_Ref);
 
-    void getLabProg(String cup, ArrayList<String> l_Laboratori);
-
-    void getLabProg(String cup, ArrayList<String> l_Lab1, ArrayList<String> l_Lab2,
+    public void getLabProg(String cup, ArrayList<String> l_Lab1, ArrayList<String> l_Lab2,
                     ArrayList<String> l_Lab3);
 }
