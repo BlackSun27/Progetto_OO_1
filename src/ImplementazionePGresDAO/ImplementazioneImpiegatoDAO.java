@@ -62,25 +62,8 @@ public class ImplementazioneImpiegatoDAO implements ImpiegatoDAO {
         stm.setString(1, cf);
     }
 
-    public void getAfferenzaLab(String cf, ArrayList<String> l_nomiLaboratori){
-        try{
-            String query = "SELECT nomelab FROM utilizza WHERE cf = ?";
-            PreparedStatement stm = c.prepareStatement(query);
-            stm.setString(1,cf);
-
-            ResultSet rs = stm.executeQuery();
-
-            while(rs.next())
-                l_nomiLaboratori.add(rs.getString(1));
-
-        }catch (SQLException e){
-            System.out.println("Errore a ottenere informazioni sulle afferenze!");
-            e.printStackTrace();
-        }
-    }
-
     @Override
-    public void getAfferenzeImp(String cf, ArrayList<String> l_Laboratori){
+    public void getAfferenzeImp(String cf, String laboratorio){
         try {
             String query = "SELECT nomelab FROM utilizza WHERE cf = ?";
             PreparedStatement stm = c.prepareStatement(query);
@@ -88,14 +71,14 @@ public class ImplementazioneImpiegatoDAO implements ImpiegatoDAO {
             ResultSet rs = stm.executeQuery();
 
             while (rs.next())
-                l_Laboratori.add(rs.getString(1));
+                laboratorio = rs.getString(1);
         }catch (SQLException e){
             e.printStackTrace();
         }
     }
 
     @Override
-    public void getProgettiLab(String cf, ArrayList<String> l_Progetti){
+    public void getProgettiLab(String cf,String progetto){
         try {
             String nomelab = "";
             try {
@@ -120,7 +103,7 @@ public class ImplementazioneImpiegatoDAO implements ImpiegatoDAO {
             ResultSet rs = stm.executeQuery();
 
             while (rs.next())
-                l_Progetti.add(rs.getString(1));
+                progetto = rs.getString(1);
         }catch (SQLException e){
             e.printStackTrace();
         }

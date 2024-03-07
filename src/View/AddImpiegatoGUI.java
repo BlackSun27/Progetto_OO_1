@@ -25,6 +25,7 @@ public class AddImpiegatoGUI {
     private JButton okBtn;
 
     public AddImpiegatoGUI(Controller controller){
+        impMainPanel = new JPanel();
         frame = new JFrame("Inserimento Impiegati");
         frame.setContentPane(impMainPanel);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

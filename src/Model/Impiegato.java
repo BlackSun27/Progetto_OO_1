@@ -17,9 +17,9 @@ public class Impiegato {
 
     private ArrayList<Promozione> promozioni = new ArrayList<>();
 
-    private ArrayList<String> laboratori = new ArrayList<>();
+    private String laboratorio = new String();
 
-    private ArrayList<String> progetti = new ArrayList<>();
+    private String progetto = new String();
 
     public Impiegato(String cf, String nome, String cognome, Date dataNascita, Date dataAssunzione,
                      String codiceCon, boolean merito, float salario, String categoria, int eta){
@@ -118,11 +118,19 @@ public class Impiegato {
         return promozioni;
     }
 
-    public void setLaboratori(ArrayList<String> laboratori){this.laboratori = laboratori;}
-    public ArrayList<String> getLaboratori(){return laboratori;}
+    public void setLaboratorio(String laboratorio) {
+        this.laboratorio = laboratorio;
+    }
 
-    public void setProgetti(ArrayList<String> progetti){this.progetti = progetti;}
+    public String getLaboratorio() {
+        return laboratorio;
+    }
 
-    public ArrayList<String> getProgetti(){return progetti;}
+    public void setProgetto(String progetto) {
+        this.progetto = progetto;
+    }
 
+    public String getProgetto() {
+        return progetto;
+    }
 }

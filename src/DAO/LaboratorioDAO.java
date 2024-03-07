@@ -15,7 +15,7 @@ public interface LaboratorioDAO {
 
     void afferenzeLab(String nomelab, ArrayList<String> l_CF);
 
-    void getRespSci(String nomelab, ArrayList<String> Cf_Resp);
+    void getRespSci(String nomelab, String Cf_Resp);
 
-    void getProgLavora(String nomelab, ArrayList<String> l_CUP);
+    void getProgLavora(String nomelab, String CUP);
 }
