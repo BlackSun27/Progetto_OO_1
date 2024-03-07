@@ -35,6 +35,7 @@ public class ImplementazioneGestionaleDAO implements GestionaleDAO {
                 l_DateAssunzioni.add(rs.getDate("dataassunzione"));
                 l_Contratti.add(rs.getString("codicecon"));
                 l_Merito.add(rs.getBoolean("merito"));
+                l_Categorie.add(rs.getString("categoria"));
                 l_Salari.add(rs.getFloat("salario"));
                 l_Eta.add(rs.getInt("eta"));
             }

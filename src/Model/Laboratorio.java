@@ -9,7 +9,7 @@ public class Laboratorio {
     private int n_afferenti = 0;
 
     private ArrayList<String> listAfferenti = new ArrayList<>();
-    private ArrayList<String> listaCup = new ArrayList<>();
+    private String cup = new String();
 
     public Laboratorio(String nome, String resp_sci, String topic, int n_afferenti){
         this.nome = nome;
@@ -68,9 +68,13 @@ public class Laboratorio {
         return listAfferenti;
     }
 
-    public void setListaCup(ArrayList<String> listaCup){this.listaCup = listaCup;}
-
-    public ArrayList<String> getListaCup() {
-        return listaCup;
+    public void setCup(String cup) {
+        this.cup = cup;
     }
+
+    public String getCup() {
+        return cup;
+    }
+
+
 }

@@ -54,7 +54,7 @@ public class ImplementazioneProgettoDAO implements ProgettoDAO {
     }
 
     @Override
-    public void getProgResp(String cup, ArrayList<String> Cf_Resp){
+    public void getProgResp(String cup, String Cf_Resp){
         try{
             String query = "SELECT cf FROM progetto AS p JOIN impiegato ON " +
                     "p.cf = i.cf WHERE p.cup = ? AND i.categoria = ?";
@@ -65,7 +65,7 @@ public class ImplementazioneProgettoDAO implements ProgettoDAO {
             ResultSet rs = stm.executeQuery();
 
             while(rs.next())
-                Cf_Resp.add(rs.getString(1));
+                Cf_Resp= rs.getString(1);
 
         }catch (SQLException e){
             e.printStackTrace();
@@ -73,7 +73,7 @@ public class ImplementazioneProgettoDAO implements ProgettoDAO {
     }
 
     @Override
-    public void getProgRef(String cup, ArrayList<String> Cf_Ref){
+    public void getProgRef(String cup, String Cf_Ref){
         try{
             String query = "SELECT cf FROM progetto AS p JOIN impiegato ON " +
                     "p.cf = i.cf WHERE p.cup = ? AND i.categoria = ?";
@@ -84,7 +84,7 @@ public class ImplementazioneProgettoDAO implements ProgettoDAO {
             ResultSet rs = stm.executeQuery();
 
             while(rs.next())
-                Cf_Ref.add(rs.getString(1));
+                Cf_Ref=rs.getString(1);
 
         }catch (SQLException e){
             e.printStackTrace();
@@ -92,8 +92,7 @@ public class ImplementazioneProgettoDAO implements ProgettoDAO {
     }
 
     @Override
-    public void getLabProg(String cup, ArrayList<String> l_Lab1, ArrayList<String> l_Lab2,
-                           ArrayList<String> l_Lab3){
+    public void getLabProg(String cup, String Lab1, String Lab2, String Lab3, ArrayList<String> l_Lab){
         try{
             String query = "SELECT lab1, lab2, lab3 FROM lavora WHERE cup = ?";
             PreparedStatement stm = c.prepareStatement(query);
@@ -102,10 +101,14 @@ public class ImplementazioneProgettoDAO implements ProgettoDAO {
             ResultSet rs = stm.executeQuery();
 
             while (rs.next()) {
-                l_Lab1.add(rs.getString(1));
-                l_Lab2.add(rs.getString(2));
-                l_Lab3.add(rs.getString(3));
+                Lab1 = rs.getString(1);
+                Lab2 = rs.getString(2);
+                Lab3 = rs.getString(3);
             }
+
+            l_Lab.add(Lab1);
+            l_Lab.add(Lab2);
+            l_Lab.add(Lab3);
 
         }catch (SQLException e){
             e.printStackTrace();

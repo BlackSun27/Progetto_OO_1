@@ -71,7 +71,7 @@ public class ImplementazioneLaboratorioDAO implements LaboratorioDAO {
     }
 
     @Override
-    public void getRespSci(String nomelab, ArrayList<String> Cf_Resp){
+    public void getRespSci(String nomelab, String Cf_Resp){
         try{
             String query = "SELECT cf FROM Utilizza AS u JOIN Impiegato AS i ON u.cf = i.cf " +
                     "WHERE i.categoria = ? AND u.cf = ?";
@@ -82,7 +82,7 @@ public class ImplementazioneLaboratorioDAO implements LaboratorioDAO {
             ResultSet rs = stm.executeQuery();
 
             while(rs.next())
-                Cf_Resp.add(rs.getString(1));
+                Cf_Resp = rs.getString(1);
 
         }catch (SQLException e){
             e.printStackTrace();
@@ -90,7 +90,7 @@ public class ImplementazioneLaboratorioDAO implements LaboratorioDAO {
     }
 
     @Override
-    public void getProgLavora(String nomelab, ArrayList<String> l_CUP){
+    public void getProgLavora(String nomelab, String CUP){
         try{
             String query = "SELECT cup FROM lavora WHERE lab1 = ? OR lab2 = ? OR lab3 = ?";
             PreparedStatement stm = c.prepareStatement(query);
@@ -101,7 +101,7 @@ public class ImplementazioneLaboratorioDAO implements LaboratorioDAO {
             ResultSet rs = stm.executeQuery();
 
             while(rs.next())
-                l_CUP.add(rs.getString(1));
+                CUP = rs.getString(1);
 
         }catch (SQLException e){
             System.out.println("Errore a ottenere informazioni sulle afferenze!");

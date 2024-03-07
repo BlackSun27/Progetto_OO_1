@@ -13,7 +13,7 @@ public interface ImpiegatoDAO {
 
     public void promuoviImpiegato(String cf, boolean merito) throws SQLException;
 
-    public void getAfferenzeImp(String cf, ArrayList<String> l_Laboratori);
+    public void getAfferenzeImp(String cf, String laboratorio);
 
-    public void getProgettiLab(String cf, ArrayList<String> l_Progetti);
+    void getProgettiLab(String cf, String progetto);
 }

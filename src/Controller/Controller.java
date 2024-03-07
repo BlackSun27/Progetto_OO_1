@@ -44,12 +44,17 @@ public class Controller {
 
         int i=0;
         for(; i<l_CF.size(); i++){
-            if(i<l_Nomi.size() && i<l_Cognomi.size() && i<l_DateNascita.size() && i<l_DateAssunzioni.size()
-            && i<l_Contratti.size() && i<l_Merito.size() && i<l_Salari.size() && i<l_Categorie.size() &&
-            i<l_Eta.size())
+            try {
                 l_Impiegati.add(new Impiegato(l_CF.get(i), l_Nomi.get(i), l_Cognomi.get(i),
-                    l_DateNascita.get(i), l_DateAssunzioni.get(i), l_Contratti.get(i), l_Merito.get(i),
-                    l_Salari.get(i), l_Categorie.get(i), l_Eta.get(i)));
+                        l_DateNascita.get(i), l_DateAssunzioni.get(i), l_Contratti.get(i), l_Merito.get(i),
+                        l_Salari.get(i), l_Categorie.get(i), l_Eta.get(i)));
+            }catch (NullPointerException e){
+                System.err.println("Eccezione del puntatore! ");
+                break;
+            }catch (IndexOutOfBoundsException e){
+                System.err.println("Eccezione dell'indice! ");
+                break;
+            }
         }
         return l_Impiegati;
     }
@@ -156,7 +161,7 @@ public class Controller {
         return null;
     }
 
-    public ArrayList<String> getAfferenzeImp(String cf){
+    public String getAfferenzeImp(String cf){
         ImpiegatoDAO impiegatoDAO = new ImplementazioneImpiegatoDAO();
 
         Impiegato impiegato = null;
@@ -167,18 +172,18 @@ public class Controller {
             break;
         }
 
-        ArrayList<String> l_LaboratoriAff = new ArrayList<>();
-        impiegatoDAO.getAfferenzeImp(cf, l_LaboratoriAff);
+        String nomelab = new String();
+        impiegatoDAO.getAfferenzeImp(cf, nomelab);
 
         if(impiegato != null) {
-            impiegato.setLaboratori(l_LaboratoriAff);
-            return l_LaboratoriAff;
+            impiegato.setLaboratorio(nomelab);
+            return nomelab;
         }
 
         return null;
     }
 
-    public ArrayList<String> getProgettiImp(String cf){
+    public String getProgettiImp(String cf){
         ImpiegatoDAO impiegatoDAO = new ImplementazioneImpiegatoDAO();
 
         Impiegato impiegato = null;
@@ -189,12 +194,12 @@ public class Controller {
             break;
         }
 
-        ArrayList<String> l_ProgettiAff = new ArrayList<>();
-        impiegatoDAO.getAfferenzeImp(cf, l_ProgettiAff);
+        String progetto = new String();
+        impiegatoDAO.getAfferenzeImp(cf, progetto);
 
         if(impiegato != null) {
-            impiegato.setProgetti(l_ProgettiAff);
-            return l_ProgettiAff;
+            impiegato.setProgetto(progetto);
+            return progetto;
         }
 
         return null;
@@ -271,7 +276,7 @@ public class Controller {
         return l_Afferenti;
     }
 
-    public ArrayList<String> getRespSciLab(String nome) {
+    public String getRespSciLab(String nome) {
         LaboratorioDAO laboratorioDAO = new ImplementazioneLaboratorioDAO();
 
         Laboratorio laboratorio = null;
@@ -282,12 +287,12 @@ public class Controller {
             break;
         }
 
-        ArrayList<String> l_ImpiegatiAff = new ArrayList<>();
-        laboratorioDAO.getRespSci(nome, l_ImpiegatiAff);
+        String cf_Resp = new String();
+        laboratorioDAO.getRespSci(nome, cf_Resp);
 
         if (laboratorio != null) {
-            laboratorio.setListAfferenti(l_ImpiegatiAff);
-            return l_ImpiegatiAff;
+            laboratorio.setResp_sci(cf_Resp);
+            return cf_Resp;
         }
 
         return null;
@@ -315,7 +320,7 @@ public class Controller {
         return null;
     }
 
-    public ArrayList<String> getCUPfromLab(String nome) {
+    public String getCUPfromLab(String nome) {
         LaboratorioDAO laboratorioDAO = new ImplementazioneLaboratorioDAO();
 
         Laboratorio laboratorio = null;
@@ -326,12 +331,12 @@ public class Controller {
             break;
         }
 
-        ArrayList<String> l_ProgettiCup = new ArrayList<>();
-        laboratorioDAO.getProgLavora(nome, l_ProgettiCup);
+        String ProgettoCup = new String();
+        laboratorioDAO.getProgLavora(nome, ProgettoCup);
 
         if (laboratorio != null) {
-            laboratorio.setListaCup(l_ProgettiCup);
-            return l_ProgettiCup;
+            laboratorio.setCup(ProgettoCup);
+            return ProgettoCup;
         }
 
         return null;
@@ -411,25 +416,21 @@ public class Controller {
             break;
         }
 
-        ArrayList<String> l_Lab1 = new ArrayList<>();
-        ArrayList<String> l_Lab2 = new ArrayList<>();
-        ArrayList<String> l_Lab3 = new ArrayList<>();
-        progettoDAO.getLabProg(cup, l_Lab1, l_Lab2, l_Lab3);
-
-        ArrayList<String> listaLab = new ArrayList<>();
-        listaLab.addAll(l_Lab1);
-        listaLab.addAll(l_Lab2);
-        listaLab.addAll(l_Lab3);
+        String lab1 = new String();
+        String lab2 = new String();
+        String lab3 = new String();
+        ArrayList<String> l_Lab = new ArrayList<>();
+        progettoDAO.getLabProg(cup, lab1, lab2, lab3, l_Lab);
 
         if (progetto != null) {
-            progetto.setListaLab(listaLab);
-            return listaLab;
+            progetto.setListaLab(l_Lab);
+            return l_Lab;
         }
 
         return null;
     }
 
-    public ArrayList<String> getRespFromCUP(String cup) {
+    public String getRespFromCUP(String cup) {
         ProgettoDAO progettoDAO = new ImplementazioneProgettoDAO();
 
         Progetto progetto = null;
@@ -440,18 +441,18 @@ public class Controller {
             break;
         }
 
-        ArrayList<String> l_Resp = new ArrayList<>();
-        progettoDAO.getProgResp(cup, l_Resp);
+        String Resp = new String();
+        progettoDAO.getProgResp(cup, Resp);
 
         if (progetto != null) {
-            progetto.setListaResp(l_Resp);
-            return l_Resp;
+            progetto.setResp(Resp);
+            return Resp;
         }
 
         return null;
     }
 
-    public ArrayList<String> getRefFromCUP(String cup) {
+    public String getRefFromCUP(String cup) {
         ProgettoDAO progettoDAO = new ImplementazioneProgettoDAO();
 
         Progetto progetto = null;
@@ -462,12 +463,12 @@ public class Controller {
             break;
         }
 
-        ArrayList<String> l_RefSci = new ArrayList<>();
-        progettoDAO.getProgRef(cup, l_RefSci);
+        String refSci = new String();
+        progettoDAO.getProgRef(cup, refSci);
 
         if (progetto != null) {
-            progetto.setListaRefSci(l_RefSci);
-            return l_RefSci;
+            progetto.setRef_sci(refSci);
+            return refSci;
         }
 
         return null;
