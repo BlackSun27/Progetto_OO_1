@@ -51,8 +51,9 @@ public class ImplementazioneImpiegatoDAO implements ImpiegatoDAO {
         if(merito) {
             String upMerito = "UPDATE Impiegato SET merito = ? WHERE cf = ?";
             try (PreparedStatement stm = c.prepareStatement(upMerito)) {
-                stm.setString(1, String.valueOf(merito));
+                stm.setBoolean(1, merito);
                 stm.setString(2, cf);
+                stm.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -63,7 +64,7 @@ public class ImplementazioneImpiegatoDAO implements ImpiegatoDAO {
     }
 
     @Override
-    public void getAfferenzeImp(String cf, String laboratorio){
+    public void getAfferenzeImp(String cf, ArrayList<String> laboratorio){
         try {
             String query = "SELECT nomelab FROM utilizza WHERE cf = ?";
             PreparedStatement stm = c.prepareStatement(query);
@@ -71,39 +72,49 @@ public class ImplementazioneImpiegatoDAO implements ImpiegatoDAO {
             ResultSet rs = stm.executeQuery();
 
             while (rs.next())
-                laboratorio = rs.getString(1);
+                laboratorio.add(rs.getString(1));
         }catch (SQLException e){
             e.printStackTrace();
         }
     }
 
     @Override
-    public void getProgettiLab(String cf,String progetto){
+    public void getProgettiLab(String cf,ArrayList<String> progetto){
         try {
-            String nomelab = "";
-            try {
-                String query = "SELECT nomelab FROM utilizza WHERE cf = ?";
-                PreparedStatement stm = c.prepareStatement(query);
-                stm.setString(1, cf);
-                ResultSet rs = stm.executeQuery();
-
-                while (rs.next())
-                    nomelab = rs.getString(1);
-
-            } catch (SQLException e) {
-                nomelab = "";
-                e.printStackTrace();
-            }
-            String query = "SELECT cup FROM lavora WHERE lab1 = ? OR lab2 = ? OR lab3 = ?";
+            String query = "SELECT * FROM lavora_view(?)";
             PreparedStatement stm = c.prepareStatement(query);
-            stm.setString(1, nomelab);
-            stm.setString(2, nomelab);
-            stm.setString(3, nomelab);
+
+            stm.setString(1,cf);
 
             ResultSet rs = stm.executeQuery();
 
-            while (rs.next())
-                progetto = rs.getString(1);
+            if(rs.next())
+                progetto.add(rs.getString(1));
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void getPromozioniImp(String cf, ArrayList<String> l_Promozioni, ArrayList<Date> date){
+        try{
+            String query = "SELECT * FROM preleva_dati WHERE codicefiscale = ?";
+            PreparedStatement stm = c.prepareStatement(query);
+            stm.setString(1, cf);
+            ResultSet rs = stm.executeQuery();
+
+            while(rs.next()){
+                for(int i=2; i<10; i++){
+                    if(i%2 == 0) {
+                        String promozione = rs.getString(i);
+                        if (promozione != null)
+                            l_Promozioni.add(promozione);
+                    }else {
+                        Date data = rs.getDate(i);
+                        if (data != null)
+                            date.add(data);
+                    }
+                }
+            }
         }catch (SQLException e){
             e.printStackTrace();
         }

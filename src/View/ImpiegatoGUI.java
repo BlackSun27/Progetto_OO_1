@@ -11,10 +11,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
-import java.util.Vector;
 
 public class ImpiegatoGUI {
 
@@ -26,16 +26,15 @@ public class ImpiegatoGUI {
     private JButton addBtn;
     private JButton removeBtn;
     private JButton promuoviBtn;
-    private JButton profileBtn;
     private JPanel btnPanel;
     private JScrollPane jsp;
-    private JList<String> profileList;
     private JTable impTable;
     private JTable profileTable;
     private JPanel profilePanel;
 
     public ImpiegatoGUI(Controller controller, JFrame prevFrame) {
         impiegatoMainPanel = new JPanel();
+        profilePanel = new JPanel();
         frame = new JFrame("Impiegati");
         frame.setSize(1280, 720);
         frame.setResizable(false);
@@ -48,14 +47,25 @@ public class ImpiegatoGUI {
                 "Salario", "Eta"};
 
         List<Impiegato> impiegati = controller.getImpiegatiDB();
+        Set<String> cfSet = new HashSet<>();
 
-        Object[][] righe = new Object[impiegati.size()][colonne.length];
         int i = 0;
         for(Impiegato imp: impiegati){
-            righe[i] = new Object[]{imp.getCf(),imp.getNome(),imp.getCognome(),
-                    imp.getDataNascita(),imp.getDataAssunzione(),imp.getCodiceCon(),
-                    imp.getSalario(),imp.getCategoria(),imp.getEta()};
-            i++;
+            String cf = imp.getCf();
+            if(!cfSet.contains(cf)) {
+                cfSet.add(cf);
+            }
+        }
+
+        Object[][] righe = new Object[cfSet.size()][colonne.length];
+
+        for(Impiegato imp: impiegati){
+            if(i<cfSet.size()) {
+                righe[i] = new Object[]{imp.getCf(), imp.getNome(), imp.getCognome(),imp.getDataNascita(),
+                imp.getDataAssunzione(), imp.getCodiceCon(), imp.getCategoria(), imp.getSalario(), imp.getEta()};
+                i++;
+            }else
+                break;
         }
 
         DefaultTableModel dtm = new DefaultTableModel(colonne, 0) {
@@ -80,20 +90,49 @@ public class ImpiegatoGUI {
         impTable.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                String selected_cf = impTable.getValueAt(impTable.getSelectedRow(), 0).toString();
-                //a_ specifica che sia un array
-                String a_Lab = controller.getAfferenzeImp(selected_cf);
-                String a_Prog = controller.getProgettiImp(selected_cf);
-                dtm.getDataVector().removeAllElements();
+                int rigaSelezionata = impTable.getSelectedRow();
+                String selected_cf = "";
+                if(rigaSelezionata != -1)
+                    selected_cf = impTable.getValueAt(rigaSelezionata, 0).toString();
+                profileTable = new JTable();
 
-                Vector<String> riga = new Vector<>();
-                riga.add(a_Lab);
-                dtm.getDataVector().add(riga);
+                String[] columnTitles = {"Promozioni", "Date", "Laboratorio", "Progetto"};
 
-                riga.add(a_Prog);
-                dtm.getDataVector().add(riga);
+                Map<List<String>, List<Date>> info_profilo = controller.getListaPromozioni(selected_cf);
+                List<String> promozioni = new ArrayList<>();
+                List<Date> date = new ArrayList<>();
+                for (Map.Entry<List<String>, List<Date>> entry : info_profilo.entrySet()) {
+                    promozioni = entry.getKey();
+                    date = entry.getValue();
+                }
 
-                dtm.fireTableDataChanged();
+                int numPromozioni = promozioni.size();
+                int numDate = date.size();
+                int maxRows = Math.max(numPromozioni, numDate);
+
+                String lab = controller.getAfferenzeImp(selected_cf).get(0);
+                String prog = controller.getProgettiImp(selected_cf).get(0);
+
+                Object[][] rowData = new Object[maxRows][4];
+                for (int i = 0; i < maxRows; i++) {
+                    rowData[i][0] = promozioni.get(i);
+                    rowData[i][1] = date.get(i);
+                    rowData[i][2] = lab;
+                    rowData[i][3] = prog;
+                }
+
+                DefaultTableModel profileTableModel = new DefaultTableModel(rowData, columnTitles) {
+                    @Override
+                    public boolean isCellEditable(int row, int column) {
+                        return false;
+                    }
+                };
+
+                profileTable.setModel(profileTableModel);
+                profilePanel.removeAll();
+                profilePanel.add(profileTable);
+                profilePanel.repaint();
+                profilePanel.revalidate();
             }
 
             @Override
@@ -117,7 +156,7 @@ public class ImpiegatoGUI {
             }
         });
         jsp = new JScrollPane(impTable);
-        jsp.setPreferredSize(new Dimension(800,500));
+        jsp.setPreferredSize(new Dimension(750,500));
         addBtn = new JButton("Aggiungi");
         removeBtn = new JButton("Rimuovi");
         promuoviBtn = new JButton("Promuovi");
@@ -130,48 +169,31 @@ public class ImpiegatoGUI {
 
         GridBagConstraints gbc = new GridBagConstraints();
 
-        // Aggiungi il pulsante "Torna alla Home" in alto a sinistra
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.NORTHWEST; // Posiziona nell'angolo in alto a sinistra
-        impiegatoMainPanel.add(backBtn, gbc);
-
-// Aggiungi la tabella
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.gridwidth = 3; // Usa tutta la larghezza disponibile per la tabella
-        gbc.fill = GridBagConstraints.BOTH; // Per far espandere la tabella in entrambe le direzioni
-        gbc.weightx = 1.0; // Per far espandere la tabella orizzontalmente
-        gbc.weighty = 1.0; // Per far espandere la tabella verticalmente
-        impiegatoMainPanel.add(jsp, gbc);
-
-// Aggiungi il pannello dei pulsanti sotto la tabella
         gbc.gridx = 0;
         gbc.gridy = 2;
-        gbc.gridwidth = 3;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.anchor = GridBagConstraints.CENTER; // Posiziona i pulsanti al centro
-        gbc.insets = new Insets(10, 10, 10, 10); // Spaziatura
-        impiegatoMainPanel.add(btnPanel, gbc);
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        gbc.insets = new Insets(10,10,10,10);
+        impiegatoMainPanel.add(backBtn, gbc);
 
-
-        /*gbc.gridx = 0;
+        gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 3;
-        gbc.insets = new Insets(10, 0, 0, 0);
-        gbc.anchor = GridBagConstraints.PAGE_START;
-        impiegatoMainPanel.add(btnPanel, gbc);
-
-        gbc.gridy = 1;
-        gbc.gridwidth = 1;
-        gbc.insets = new Insets(10, 5, 0, 5);
-        impiegatoMainPanel.add(addBtn, gbc);
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        impiegatoMainPanel.add(jsp, gbc);
 
         gbc.gridx = 1;
-        impiegatoMainPanel.add(removeBtn, gbc);
+        gbc.fill = GridBagConstraints.BOTH;
+        impiegatoMainPanel.add(profilePanel, gbc);
 
-        gbc.gridx = 2;
-        impiegatoMainPanel.add(promuoviBtn, gbc);*/
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 3;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        impiegatoMainPanel.add(btnPanel, gbc);
 
         Border compoundBorder = BorderFactory.createCompoundBorder(
                 BorderFactory.createEmptyBorder(),
@@ -242,7 +264,6 @@ public class ImpiegatoGUI {
 
             }
         });
-
     }
 
     private void ricaricaTabella(Controller controller, String[] colonne) {
@@ -259,8 +280,8 @@ public class ImpiegatoGUI {
                 righe[i][3] = imp.getDataNascita();
                 righe[i][4] = imp.getDataAssunzione();
                 righe[i][5] = imp.getCodiceCon();
-                righe[i][6] = imp.getSalario();
-                righe[i][7] = imp.getCategoria();
+                righe[i][6] = imp.getCategoria();
+                righe[i][7] = imp.getSalario();
                 righe[i][8] = imp.getEta();
             }
 
