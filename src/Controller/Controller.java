@@ -6,9 +6,7 @@ import Model.*;
 
 import java.sql.Date;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Controller {
     //l_ prima di ogni variabile fa riferimento al fatto che sia una lista,
@@ -144,61 +142,59 @@ public class Controller {
         return l_Cognomi;
     }
 
-    public Impiegato getListaPromozioni(String cf){
-        ArrayList<Promozione> l_PromozioniImp = new ArrayList<>();
+    public Map<List<String>, List<Date>> getListaPromozioni(String cf){
+        ArrayList<String> promozioni = new ArrayList<>();
+        ArrayList<Date> date = new ArrayList<>();
 
-        for(Promozione p : l_PromozioniImp){
-            if(p.getCf().equals(cf))
-                l_PromozioniImp.add(p);
-        }
+        ImpiegatoDAO impDao = new ImplementazioneImpiegatoDAO();
+        impDao.getPromozioniImp(cf, promozioni, date);
 
-        for(Impiegato i : l_Impiegati){
-            if(Objects.equals(cf, i.getCf())){
-                i.setPromozioni(l_PromozioniImp);
-                return i;
-            }
-        }
-        return null;
+        Map<List<String>, List<Date>> info_profilo = new HashMap<>();
+        info_profilo.put(promozioni, date);
+
+        return info_profilo;
     }
 
-    public String getAfferenzeImp(String cf){
+    public ArrayList<String> getAfferenzeImp(String cf){
         ImpiegatoDAO impiegatoDAO = new ImplementazioneImpiegatoDAO();
 
         Impiegato impiegato = null;
 
-        for(Impiegato i : l_Impiegati){
-            if(i.getCf().equals(cf))
-                impiegato = i;
-            break;
+        for(int i=0; i<l_Impiegati.size(); i++){
+            if(l_Impiegati.get(i).getCf().equals(cf)) {
+                impiegato = l_Impiegati.get(i);
+                break;
+            }
         }
 
-        String nomelab = new String();
+        ArrayList<String> nomelab = new ArrayList<>();
         impiegatoDAO.getAfferenzeImp(cf, nomelab);
 
-        if(impiegato != null) {
-            impiegato.setLaboratorio(nomelab);
+        if(impiegato != null && !nomelab.isEmpty()) {
+            impiegato.setLaboratorio(nomelab.get(0));
             return nomelab;
         }
 
         return null;
     }
 
-    public String getProgettiImp(String cf){
+    public ArrayList<String> getProgettiImp(String cf){
         ImpiegatoDAO impiegatoDAO = new ImplementazioneImpiegatoDAO();
 
         Impiegato impiegato = null;
 
-        for(Impiegato i : l_Impiegati){
-            if(i.getCf().equals(cf))
-                impiegato = i;
-            break;
+        for(int i=0; i<l_Impiegati.size(); i++){
+            if(l_Impiegati.get(i).getCf().equals(cf)){
+                impiegato = l_Impiegati.get(i);
+                break;
+            }
         }
 
-        String progetto = new String();
-        impiegatoDAO.getAfferenzeImp(cf, progetto);
+        ArrayList<String> progetto = new ArrayList<>();
+        impiegatoDAO.getProgettiLab(cf, progetto);
 
         if(impiegato != null) {
-            impiegato.setProgetto(progetto);
+            impiegato.setProgetto(progetto.get(0));
             return progetto;
         }
 

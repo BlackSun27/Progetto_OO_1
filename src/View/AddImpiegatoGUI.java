@@ -33,8 +33,6 @@ public class AddImpiegatoGUI {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        annullaBtn.addActionListener(e->frame.dispose());
-
         okBtn.addActionListener(e->{
             int risposta1 = JOptionPane.showConfirmDialog(null, "Vuoi inserire il seguente impiegato? ",
                     "Conferma", JOptionPane.YES_NO_OPTION);
