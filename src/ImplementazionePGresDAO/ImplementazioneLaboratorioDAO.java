@@ -22,14 +22,13 @@ public class ImplementazioneLaboratorioDAO implements LaboratorioDAO {
     }
 
     @Override
-    public void inserisciLaboratorio(String nome, String respSci, String topic, int n_Afferenti)
+    public void inserisciLaboratorio(String nome, String respSci, String topic)
             throws SQLException {
-        String query = "CALL inseriscilaboratorio(?,?,?,?); ";
+        String query = "CALL inseriscilaboratorio(?,?,?); ";
         PreparedStatement stm = c.prepareStatement(query);
         stm.setString(1, nome);
         stm.setString(2, respSci);
         stm.setString(3, topic);
-        stm.setInt(4, n_Afferenti);
 
         stm.executeUpdate();
     }
@@ -45,11 +44,11 @@ public class ImplementazioneLaboratorioDAO implements LaboratorioDAO {
 
     @Override
     public void aggiungiAfferente(String nomeLab, String cf) throws SQLException{
-        String queryUti = "CALL inserisciutilizza(?,?); ";
+        String queryUti = "INSERT INTO utilizza(cf,nomelab) VALUES (?, ?)";
         PreparedStatement stm = c.prepareStatement(queryUti);
         stm.setString(1, cf);
         stm.setString(2, nomeLab);
-        stm.executeUpdate();
+        stm.executeQuery();
     }
 
     @Override
@@ -71,18 +70,22 @@ public class ImplementazioneLaboratorioDAO implements LaboratorioDAO {
     }
 
     @Override
-    public void getRespSci(String nomelab, String Cf_Resp){
+    public void getRespSci(String nomelab, ArrayList<String> resp){
         try{
-            String query = "SELECT cf FROM Utilizza AS u JOIN Impiegato AS i ON u.cf = i.cf " +
-                    "WHERE i.categoria = ? AND u.cf = ?";
+            String query = "SELECT i.cf, i.nome, i.cognome\n" +
+                    "FROM laboratorio AS u\n" +
+                    "JOIN Impiegato AS i ON u.respscie = i.cf\n" +
+                    "WHERE u.nome = ?";
             PreparedStatement stm = c.prepareStatement(query);
-            stm.setString(1, "senior");
-            stm.setString(2, nomelab);
+            stm.setString(1, nomelab);
 
             ResultSet rs = stm.executeQuery();
 
-            while(rs.next())
-                Cf_Resp = rs.getString(1);
+            while(rs.next()) {
+                resp.add(rs.getString("cf"));
+                resp.add(rs.getString("nome"));
+                resp.add(rs.getString("cognome"));
+            }
 
         }catch (SQLException e){
             e.printStackTrace();
@@ -90,7 +93,7 @@ public class ImplementazioneLaboratorioDAO implements LaboratorioDAO {
     }
 
     @Override
-    public void getProgLavora(String nomelab, String CUP){
+    public void getProgLavora(String nomelab, ArrayList<String> CUP){
         try{
             String query = "SELECT cup FROM lavora WHERE lab1 = ? OR lab2 = ? OR lab3 = ?";
             PreparedStatement stm = c.prepareStatement(query);
@@ -101,7 +104,7 @@ public class ImplementazioneLaboratorioDAO implements LaboratorioDAO {
             ResultSet rs = stm.executeQuery();
 
             while(rs.next())
-                CUP = rs.getString(1);
+                CUP.add(rs.getString(1));
 
         }catch (SQLException e){
             System.out.println("Errore a ottenere informazioni sulle afferenze!");

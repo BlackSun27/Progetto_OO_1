@@ -272,7 +272,7 @@ public class Controller {
         return l_Afferenti;
     }
 
-    public String getRespSciLab(String nome) {
+    public ArrayList<String> getRespSciLab(String nome) {
         LaboratorioDAO laboratorioDAO = new ImplementazioneLaboratorioDAO();
 
         Laboratorio laboratorio = null;
@@ -283,11 +283,11 @@ public class Controller {
             break;
         }
 
-        String cf_Resp = new String();
+        ArrayList<String> cf_Resp = new ArrayList<>();
         laboratorioDAO.getRespSci(nome, cf_Resp);
 
         if (laboratorio != null) {
-            laboratorio.setResp_sci(cf_Resp);
+            laboratorio.setResp_sci(cf_Resp.get(0));
             return cf_Resp;
         }
 
@@ -327,21 +327,21 @@ public class Controller {
             break;
         }
 
-        String ProgettoCup = new String();
+        ArrayList<String> ProgettoCup = new ArrayList<>();
         laboratorioDAO.getProgLavora(nome, ProgettoCup);
 
         if (laboratorio != null) {
-            laboratorio.setCup(ProgettoCup);
-            return ProgettoCup;
+            laboratorio.setCup(ProgettoCup.get(0));
+            return ProgettoCup.get(0);
         }
 
         return null;
     }
 
-    public void aggiungiLab(String nomeLab, String respSci, String topic, int n_Afferenti) throws SQLException {
+    public void aggiungiLab(String nomeLab, String respSci, String topic) throws SQLException {
         LaboratorioDAO laboratorioDAO = new ImplementazioneLaboratorioDAO();
 
-        laboratorioDAO.inserisciLaboratorio(nomeLab, respSci, topic, n_Afferenti);
+        laboratorioDAO.inserisciLaboratorio(nomeLab, respSci, topic);
 
         l_Laboratori.clear();
         getLaboratoriDB();

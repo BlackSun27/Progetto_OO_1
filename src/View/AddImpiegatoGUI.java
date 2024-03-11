@@ -21,17 +21,42 @@ public class AddImpiegatoGUI {
     private JLabel cognomeLabel;
     private JLabel dataNascitaLabel;
     private JLabel codiceConLabel;
-    private JButton annullaBtn;
     private JButton okBtn;
 
     public AddImpiegatoGUI(Controller controller){
         impMainPanel = new JPanel();
+        impMainPanel.setLayout(new BoxLayout(impMainPanel, BoxLayout.Y_AXIS));
         frame = new JFrame("Inserimento Impiegati");
         frame.setContentPane(impMainPanel);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(580, 350);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+
+        cfLabel = new JLabel("CF:");
+        cfTextField = new JTextField(20);
+        nomeLabel = new JLabel("Nome:");
+        nomeTextField = new JTextField(20);
+        cognomeLabel = new JLabel("Cognome:");
+        cognomeTextField = new JTextField(20);
+        dataNascitaLabel = new JLabel("Data di nascita (anno-mese-giorno):");
+        dataNascitaField = new JTextField(20);
+        codiceConLabel = new JLabel("Codice Contratto:");
+        codiceConField = new JTextField(20);
+
+        okBtn = new JButton("OK");
+
+        impMainPanel.add(cfLabel);
+        impMainPanel.add(cfTextField);
+        impMainPanel.add(nomeLabel);
+        impMainPanel.add(nomeTextField);
+        impMainPanel.add(cognomeLabel);
+        impMainPanel.add(cognomeTextField);
+        impMainPanel.add(dataNascitaLabel);
+        impMainPanel.add(dataNascitaField);
+        impMainPanel.add(codiceConLabel);
+        impMainPanel.add(codiceConField);
+        impMainPanel.add(okBtn);
 
         okBtn.addActionListener(e->{
             int risposta1 = JOptionPane.showConfirmDialog(null, "Vuoi inserire il seguente impiegato? ",
@@ -40,8 +65,6 @@ public class AddImpiegatoGUI {
                 String cf = cfTextField.getText();
                 String nome = nomeTextField.getText();
                 String cognome = cognomeTextField.getText();
-                //String cf, String nome, String cognome, Date dataNascita, Date dataAssunzione,
-                //String codiceCon, boolean merito, float salario, String categoria, int eta
                 String dataNascita_S = dataNascitaField.getText();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 LocalDate dataNascita_LD = LocalDate.parse(dataNascita_S, formatter);

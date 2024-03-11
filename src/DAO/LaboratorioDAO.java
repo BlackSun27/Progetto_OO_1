@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public interface LaboratorioDAO {
 
-    public void inserisciLaboratorio(String nomeLab, String respSci, String topic, int n_Afferenti)
+    public void inserisciLaboratorio(String nomeLab, String respSci, String topic)
             throws SQLException;
 
     public void rimuoviLaboratorio(String nomeLab) throws SQLException;
@@ -15,7 +15,7 @@ public interface LaboratorioDAO {
 
     void afferenzeLab(String nomelab, ArrayList<String> l_CF);
 
-    void getRespSci(String nomelab, String Cf_Resp);
+    void getRespSci(String nomelab, ArrayList<String> resp);
 
-    void getProgLavora(String nomelab, String CUP);
+    void getProgLavora(String nomelab, ArrayList<String> CUP);
 }

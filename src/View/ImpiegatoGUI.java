@@ -17,10 +17,7 @@ import java.util.*;
 import java.util.List;
 
 public class ImpiegatoGUI {
-
-    DefaultTableModel dfm;
     private JPanel impiegatoMainPanel;
-    private JPanel impiegatoPanel;
     private JButton backBtn;
     JFrame frame;
     private JButton addBtn;
@@ -50,21 +47,21 @@ public class ImpiegatoGUI {
         Set<String> cfSet = new HashSet<>();
 
         int i = 0;
-        for(Impiegato imp: impiegati){
+        for (Impiegato imp : impiegati) {
             String cf = imp.getCf();
-            if(!cfSet.contains(cf)) {
+            if (!cfSet.contains(cf)) {
                 cfSet.add(cf);
             }
         }
 
         Object[][] righe = new Object[cfSet.size()][colonne.length];
 
-        for(Impiegato imp: impiegati){
-            if(i<cfSet.size()) {
-                righe[i] = new Object[]{imp.getCf(), imp.getNome(), imp.getCognome(),imp.getDataNascita(),
-                imp.getDataAssunzione(), imp.getCodiceCon(), imp.getCategoria(), imp.getSalario(), imp.getEta()};
+        for (Impiegato imp : impiegati) {
+            if (i < cfSet.size()) {
+                righe[i] = new Object[]{imp.getCf(), imp.getNome(), imp.getCognome(), imp.getDataNascita(),
+                        imp.getDataAssunzione(), imp.getCodiceCon(), imp.getCategoria(), imp.getSalario(), imp.getEta()};
                 i++;
-            }else
+            } else
                 break;
         }
 
@@ -74,9 +71,8 @@ public class ImpiegatoGUI {
                 return false;
             }
         };
-        i=0;
 
-        for(Object[] riga : righe){
+        for (Object[] riga : righe) {
             dtm.addRow(riga);
         }
 
@@ -92,7 +88,7 @@ public class ImpiegatoGUI {
             public void mouseClicked(MouseEvent e) {
                 int rigaSelezionata = impTable.getSelectedRow();
                 String selected_cf = "";
-                if(rigaSelezionata != -1)
+                if (rigaSelezionata != -1)
                     selected_cf = impTable.getValueAt(rigaSelezionata, 0).toString();
                 profileTable = new JTable();
 
@@ -110,15 +106,30 @@ public class ImpiegatoGUI {
                 int numDate = date.size();
                 int maxRows = Math.max(numPromozioni, numDate);
 
-                String lab = controller.getAfferenzeImp(selected_cf).get(0);
-                String prog = controller.getProgettiImp(selected_cf).get(0);
+                String lab = new String();
+                String prog = new String();
+                try {
+                    lab = controller.getAfferenzeImp(selected_cf).get(0);
+                    prog = controller.getProgettiImp(selected_cf).get(0);
+                } catch (NullPointerException ex) {
+                    lab = "";
+                    prog = "";
+                }
 
-                Object[][] rowData = new Object[maxRows][4];
+                List<Object[]> righeNonVuote = new ArrayList<>();
+
                 for (int i = 0; i < maxRows; i++) {
-                    rowData[i][0] = promozioni.get(i);
-                    rowData[i][1] = date.get(i);
-                    rowData[i][2] = lab;
-                    rowData[i][3] = prog;
+                    Object[] riga = new Object[4];
+                    riga[0] = promozioni.get(i);
+                    riga[1] = date.get(i);
+                    riga[2] = lab != null ? lab : "";
+                    riga[3] = prog != null ? prog : "";
+                    righeNonVuote.add(riga);
+                }
+
+                Object[][] rowData = new Object[righeNonVuote.size()][4];
+                for (int i = 0; i < righeNonVuote.size(); i++) {
+                    rowData[i] = righeNonVuote.get(i);
                 }
 
                 DefaultTableModel profileTableModel = new DefaultTableModel(rowData, columnTitles) {
@@ -156,7 +167,7 @@ public class ImpiegatoGUI {
             }
         });
         jsp = new JScrollPane(impTable);
-        jsp.setPreferredSize(new Dimension(750,500));
+        jsp.setPreferredSize(new Dimension(800, 500));
         addBtn = new JButton("Aggiungi");
         removeBtn = new JButton("Rimuovi");
         promuoviBtn = new JButton("Promuovi");
@@ -172,7 +183,7 @@ public class ImpiegatoGUI {
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.anchor = GridBagConstraints.NORTHWEST;
-        gbc.insets = new Insets(10,10,10,10);
+        gbc.insets = new Insets(10, 10, 10, 10);
         impiegatoMainPanel.add(backBtn, gbc);
 
         gbc.gridx = 0;
@@ -261,7 +272,6 @@ public class ImpiegatoGUI {
                         ex.printStackTrace();
                     }
                 }
-
             }
         });
     }
@@ -270,9 +280,17 @@ public class ImpiegatoGUI {
         if (controller != null && colonne.length != 0) {
             List<Impiegato> impiegati = controller.getImpiegatiDB();
 
-            Object[][] righe = new Object[impiegati.size()][9];
+            Set<String> cfSet = new HashSet<>();
+            for (Impiegato imp : impiegati) {
+                String cf = imp.getCf();
+                if (!cfSet.contains(cf)) {
+                    cfSet.add(cf);
+                }
+            }
+
+            Object[][] righe = new Object[cfSet.size()][9];
             int i = 0;
-            for (; i < impiegati.size(); i++) {
+            for (; i < cfSet.size(); i++) {
                 Impiegato imp = impiegati.get(i);
                 righe[i][0] = imp.getCf();
                 righe[i][1] = imp.getNome();
@@ -284,36 +302,6 @@ public class ImpiegatoGUI {
                 righe[i][7] = imp.getSalario();
                 righe[i][8] = imp.getEta();
             }
-
-            DefaultTableModel dtm = (DefaultTableModel) impTable.getModel();
-            dtm.setDataVector(righe, colonne);
-            TableColumnModel columnModel = impTable.getColumnModel();
-            for (i=0; i < impTable.getColumnCount(); i++) {
-                TableColumn column = columnModel.getColumn(i);
-                int width = getColumnWidth(i);
-                column.setPreferredWidth(width);
-            }
         }
-    }
-
-    private int getColumnWidth(int columnIndex) {
-        int width;
-        TableColumn column = impTable.getColumnModel().getColumn(columnIndex);
-        TableCellRenderer renderer = column.getHeaderRenderer();
-        if (renderer == null) {
-            renderer = impTable.getTableHeader().getDefaultRenderer();
-        }
-        Component comp = renderer.getTableCellRendererComponent(
-                impTable, column.getHeaderValue(), false, false, 0, 0);
-        width = comp.getPreferredSize().width;
-
-        for (int row = 0; row < impTable.getRowCount(); row++) {
-            renderer = impTable.getCellRenderer(row, columnIndex);
-            Component component = renderer.getTableCellRendererComponent(
-                    impTable, impTable.getValueAt(row, columnIndex), false, false, row, columnIndex);
-            width = Math.max(width, component.getPreferredSize().width);
-        }
-
-        return width + impTable.getIntercellSpacing().width;
     }
 }

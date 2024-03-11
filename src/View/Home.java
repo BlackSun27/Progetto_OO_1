@@ -65,12 +65,12 @@ public class Home {
             new ImpiegatoGUI(controller,frame);
         });
 
-        /*laboratoriobtn.addActionListener(e->{
+        laboratoriobtn.addActionListener(e->{
             frame.setVisible(true);
             new LaboratorioGUI(controller,frame);
         });
 
-        progettobtn.addActionListener(e->{
+        /*progettobtn.addActionListener(e->{
             frame.setVisible(true);
             new ProgettoGUI(controller,frame);
         });*/
