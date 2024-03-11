@@ -22,7 +22,7 @@ public class ImplementazioneImpiegatoDAO implements ImpiegatoDAO {
     public void inserisciImpiegato(String cf, String nome, String cognome, Date dataNascita, Date dataAssunzione,
                                    String codiceCon, boolean merito, float salario, String categoria, int eta)
             throws SQLException {
-        String queryImp = "CALL inserisciimpiegato(?,?,?,?,?,?,?,?,?);";
+        String queryImp = "CALL inserisciimpiegato(?,?,?,?,?,?,?,?,?::numeric);";
 
         CallableStatement stm = c.prepareCall(queryImp);
         stm.setString(1, cf);
@@ -48,19 +48,11 @@ public class ImplementazioneImpiegatoDAO implements ImpiegatoDAO {
 
     @Override
     public void promuoviImpiegato(String cf, boolean merito) throws SQLException{
-        if(merito) {
-            String upMerito = "UPDATE Impiegato SET merito = ? WHERE cf = ?";
-            try (PreparedStatement stm = c.prepareStatement(upMerito)) {
-                stm.setBoolean(1, merito);
-                stm.setString(2, cf);
-                stm.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        String query = "CALL inseriscipromozione(?)";
+        String query = "CALL inseriscipromozioni(?,?)";
         CallableStatement stm = c.prepareCall(query);
         stm.setString(1, cf);
+        stm.setBoolean(2, merito);
+        stm.executeUpdate();
     }
 
     @Override
@@ -97,7 +89,7 @@ public class ImplementazioneImpiegatoDAO implements ImpiegatoDAO {
 
     public void getPromozioniImp(String cf, ArrayList<String> l_Promozioni, ArrayList<Date> date){
         try{
-            String query = "SELECT * FROM preleva_dati WHERE codicefiscale = ?";
+            String query = "SELECT * FROM promozioni WHERE cf = ?";
             PreparedStatement stm = c.prepareStatement(query);
             stm.setString(1, cf);
             ResultSet rs = stm.executeQuery();
