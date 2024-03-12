@@ -41,6 +41,7 @@ public class AddLaboratorioGUI {
         laboratorioPanel.add(topicField);
 
         okBtn = new JButton("OK");
+        laboratorioPanel.add(okBtn);
 
         okBtn.addActionListener(e -> {
             int risposta = JOptionPane.showConfirmDialog(null, "Vuoi inserire il seguente laboratorio? ",
@@ -49,10 +50,19 @@ public class AddLaboratorioGUI {
                 String nome = nomeTextField.getText();
                 String resp = resp_sciField.getText();
                 String topic = topicField.getText();
-                try {
-                    controller.aggiungiLab(nome, resp, topic);
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
+                if(!nome.isEmpty() || !resp.isEmpty() || !topic.isEmpty()) {
+                    try {
+                        controller.aggiungiLab(nome, resp, topic);
+                        JOptionPane.showMessageDialog(null, "Inserimento avvenuto con successo!", "Conferma",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        frame.dispose();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null, "Ci sono campi vuoti! ", "Errore",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    frame.dispose();
                 }
             }
         });

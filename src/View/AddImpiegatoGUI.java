@@ -7,6 +7,7 @@ import java.sql.*;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 public class AddImpiegatoGUI {
     public JFrame frame;
@@ -67,8 +68,17 @@ public class AddImpiegatoGUI {
                 String cognome = cognomeTextField.getText();
                 String dataNascita_S = dataNascitaField.getText();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-                LocalDate dataNascita_LD = LocalDate.parse(dataNascita_S, formatter);
-                Date dataNascita = Date.valueOf(dataNascita_LD);
+                LocalDate dataNascita_LD = null;
+                Date dataNascita = null;
+                try {
+                    dataNascita_LD = LocalDate.parse(dataNascita_S, formatter);
+                    dataNascita = Date.valueOf(dataNascita_LD);
+                }catch (DateTimeParseException d){
+                    JOptionPane.showMessageDialog(null, "Non puo' proseguire l'inserimento", "Errore",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    frame.dispose();
+                    return;
+                }
                 LocalDate dataAttuale_LD = LocalDate.now();
                 Date dataAttuale = Date.valueOf(dataAttuale_LD);
                 String codiceCon = codiceConField.getText();
@@ -81,17 +91,26 @@ public class AddImpiegatoGUI {
                     salario = 3000.00f;
                     categoria = "Dirigente";
                 }
-                Period periodo = Period.between(dataNascita_LD, dataAttuale_LD);
-                int eta = periodo.getYears();
+                Period periodo = null;
+                if(dataNascita != null)
+                    periodo = Period.between(dataNascita_LD, dataAttuale_LD);
 
-                try{
-                    controller.aggiungiImp(cf, nome, cognome, dataNascita, dataAttuale, codiceCon,
-                            merito, salario, categoria, eta);
-                    JOptionPane.showMessageDialog(null, "Inserimento avvenuto con successo! ", "Successo",
+                int eta = periodo.getYears();
+                if(!cf.isEmpty() || !nome.isEmpty() || !cognome.isEmpty() || dataNascita != null ||
+                !codiceCon.isEmpty() || eta != 0) {
+                    try {
+                        controller.aggiungiImp(cf, nome, cognome, dataNascita, dataAttuale, codiceCon,
+                                merito, salario, categoria, eta);
+                        JOptionPane.showMessageDialog(null, "Inserimento avvenuto con successo! ", "Successo",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        frame.dispose();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null, "Ci sono campi vuoti! ", "Errore",
                             JOptionPane.INFORMATION_MESSAGE);
                     frame.dispose();
-                }catch (SQLException ex){
-                    ex.printStackTrace();
                 }
             }
         });
