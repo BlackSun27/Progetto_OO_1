@@ -217,8 +217,9 @@ public class LaboratorioGUI {
              afferenteAddPanel.setLayout(new BoxLayout(afferenteAddPanel, BoxLayout.Y_AXIS));
              if(selezione == JOptionPane.YES_OPTION){
                  afferenteLabel = new JLabel("CF: ");
-                 afferenteField = new JTextField();
-
+                 afferenteField = new JTextField(20);
+                 afferenteAddPanel.add(afferenteLabel);
+                 afferenteAddPanel.add(afferenteField);
                  JOptionPane.showMessageDialog(null, afferenteAddPanel, "Inserisci il CF",
                          JOptionPane.PLAIN_MESSAGE);
 

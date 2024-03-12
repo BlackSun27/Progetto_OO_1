@@ -117,17 +117,23 @@ public class ImpiegatoGUI {
                 }
 
                 List<Object[]> righeNonVuote = new ArrayList<>();
-
+                int c = colonne.length;
                 for (int i = 0; i < maxRows; i++) {
                     Object[] riga = new Object[4];
                     riga[0] = promozioni.get(i);
                     riga[1] = date.get(i);
-                    riga[2] = lab != null ? lab : "";
-                    riga[3] = prog != null ? prog : "";
+                    if(lab!=null)
+                        riga[2] = lab;
+                    else
+                        c--;
+                    if(prog != null)
+                        riga[3] = prog;
+                    else
+                        c--;
                     righeNonVuote.add(riga);
                 }
 
-                Object[][] rowData = new Object[righeNonVuote.size()][4];
+                Object[][] rowData = new Object[righeNonVuote.size()][c];
                 for (int i = 0; i < righeNonVuote.size(); i++) {
                     rowData[i] = righeNonVuote.get(i);
                 }
