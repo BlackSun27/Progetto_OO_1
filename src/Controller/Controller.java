@@ -277,10 +277,11 @@ public class Controller {
 
         Laboratorio laboratorio = null;
 
-        for (Laboratorio l : l_Laboratori) {
-            if (l.getNome().equals(nome))
-                laboratorio = l;
-            break;
+        for (int i = 0; i<l_Laboratori.size(); i++) {
+            if (l_Laboratori.get(i).getNome().equals(nome)) {
+                laboratorio = l_Laboratori.get(i);
+                break;
+            }
         }
 
         ArrayList<String> cf_Resp = new ArrayList<>();
@@ -321,10 +322,10 @@ public class Controller {
 
         Laboratorio laboratorio = null;
 
-        for (Laboratorio l : l_Laboratori) {
-            if (l.getNome().equals(nome))
-                laboratorio = l;
-            break;
+        for(int i=0; i<l_Laboratori.size() ; i++){
+            laboratorio = l_Laboratori.get(i);
+            if(laboratorio.getNome().equals(nome))
+                break;
         }
 
         ArrayList<String> ProgettoCup = new ArrayList<>();

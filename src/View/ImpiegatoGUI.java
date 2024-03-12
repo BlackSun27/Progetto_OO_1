@@ -37,7 +37,7 @@ public class ImpiegatoGUI {
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setContentPane(impiegatoMainPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
 
         String[] colonne = {"CF", "Nome", "Cognome", "DataNascita", "DataAssunzione", "CodiceCon", "Categoria",

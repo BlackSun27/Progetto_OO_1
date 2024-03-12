@@ -40,7 +40,7 @@ public class LaboratorioGUI {
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setContentPane(laboratorioMainPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
 
         String colonne[] = {"Nome", "Resp. Scien.", "Topic", "Num. Afferenti"};
@@ -189,6 +189,23 @@ public class LaboratorioGUI {
             frame.dispose();
         });
 
+        removeBtn.addActionListener(e->{
+            String nome = labTable.getValueAt(labTable.getSelectedRow(), 0).toString();
+            int selection = JOptionPane.showConfirmDialog(null, "Sicuro di voler rimuovere il laboratorio?",
+                    "Conferma", JOptionPane.YES_NO_OPTION);
+
+            if(selection == JOptionPane.YES_OPTION){
+                try {
+                    controller.rimuoviLab(nome);
+                    JOptionPane.showMessageDialog(null, "Rimozione avvenuta con successo! ", "Conferma",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    ricaricaTabella(controller, colonne);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
         newAffBtn.addActionListener(e->{
              int rigaSelezionata = labTable.getSelectedRow();
              String nome = "";
@@ -201,6 +218,10 @@ public class LaboratorioGUI {
              if(selezione == JOptionPane.YES_OPTION){
                  afferenteLabel = new JLabel("CF: ");
                  afferenteField = new JTextField();
+
+                 JOptionPane.showMessageDialog(null, afferenteAddPanel, "Inserisci il CF",
+                         JOptionPane.PLAIN_MESSAGE);
+
                  String cf = afferenteField.getText();
                  try {
                      controller.aggiungiAfferenteLab(nome, cf);
