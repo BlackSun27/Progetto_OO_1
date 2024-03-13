@@ -11,8 +11,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.ObjectStreamException;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
@@ -90,19 +88,23 @@ public class LaboratorioGUI {
                 if(rigaSelezionata != -1)
                     nome = labTable.getValueAt(rigaSelezionata, 0).toString();
                 profileTable = new JTable();
-
+                ArrayList<String> info_lab = new ArrayList<>();
                 String prog = controller.getCUPfromLab(nome);
+                if(prog!=null)
+                    info_lab.add(prog);
                 ArrayList<String> info_resp = controller.getRespSciLab(nome);
-
-                Object[][] colonne = new Object[info_resp.size() + 1][2];
-                colonne[0][0] = "Prog";
-                colonne[0][1] = "Resp Sci";
-                for(int i=1; i<info_resp.size() + 1; i++){
-                    colonne[i][0] = prog;
-                    colonne[i][1] = info_resp.get(i-1);
+                for(int i =0; i<info_resp.size(); i++){
+                    info_lab.add(info_resp.get(i));
                 }
 
-                DefaultTableModel profileTableModel = new DefaultTableModel(colonne, new String[]{"Prog", "Resp Sci"}) {
+                Object[][] colonne = new Object[info_lab.size()][1];
+
+                for(int i=0; i< info_lab.size(); i++){
+                    colonne[i][0] = info_lab.get(i);
+                }
+
+
+                DefaultTableModel profileTableModel = new DefaultTableModel(colonne, new String[]{"Info Lab."}) {
                     @Override
                     public boolean isCellEditable(int row, int column) {
                         return false;
@@ -226,9 +228,12 @@ public class LaboratorioGUI {
                  String cf = afferenteField.getText();
                  try {
                      controller.aggiungiAfferenteLab(nome, cf);
+                     JOptionPane.showMessageDialog(null, "Inserimento avvenuto con successo!", "Successo",
+                             JOptionPane.PLAIN_MESSAGE);
                      ricaricaTabella(controller, colonne);
                  } catch (SQLException ex) {
-                     ex.printStackTrace();
+                     JOptionPane.showMessageDialog(null, "Inserimento non effettuato, motivo: " + ex.toString(),
+                             "Insuccesso", JOptionPane.PLAIN_MESSAGE);
                  }
              }
         });

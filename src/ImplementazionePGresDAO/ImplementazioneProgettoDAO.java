@@ -54,52 +54,38 @@ public class ImplementazioneProgettoDAO implements ProgettoDAO {
     }
 
     @Override
-    public void getProgResp(String cup, String Cf_Resp){
-        try{
-            String query = "SELECT cf FROM progetto AS p JOIN impiegato ON " +
-                    "p.cf = i.cf WHERE p.cup = ? AND i.categoria = ?";
-            PreparedStatement stm = c.prepareStatement(query);
-            stm.setString(1, cup);
-            stm.setString(2, "dirigente");
-
-            ResultSet rs = stm.executeQuery();
-
-            while(rs.next())
-                Cf_Resp= rs.getString(1);
-
+    public ArrayList<String> getProgImp(String cup){
+        String query1 = "SELECT nome, cognome, cf FROM presenza WHERE cup = ?";
+        ArrayList<String> info = new ArrayList<>();
+        try {
+            PreparedStatement stm1 = c.prepareCall(query1);
+            stm1.setString(1,cup);
+            ResultSet rs = stm1.executeQuery();
+            while (rs.next()) {
+                //elementi pari -> responsabili
+                //elementi dispari -> referenti
+                info.add(rs.getString("nome"));
+                info.add(rs.getString("cognome"));
+                info.add(rs.getString("cf"));
+            }
         }catch (SQLException e){
             e.printStackTrace();
+            info = null;
         }
+        return info;
     }
 
     @Override
-    public void getProgRef(String cup, String Cf_Ref){
-        try{
-            String query = "SELECT cf FROM progetto AS p JOIN impiegato ON " +
-                    "p.cf = i.cf WHERE p.cup = ? AND i.categoria = ?";
-            PreparedStatement stm = c.prepareStatement(query);
-            stm.setString(1, cup);
-            stm.setString(2, "senior");
-
-            ResultSet rs = stm.executeQuery();
-
-            while(rs.next())
-                Cf_Ref=rs.getString(1);
-
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void getLabProg(String cup, String Lab1, String Lab2, String Lab3, ArrayList<String> l_Lab){
+    public void getLabProg(String cup, ArrayList<String> l_Lab){
         try{
             String query = "SELECT lab1, lab2, lab3 FROM lavora WHERE cup = ?";
             PreparedStatement stm = c.prepareStatement(query);
             stm.setString(1, cup);
 
             ResultSet rs = stm.executeQuery();
-
+            String Lab1 = new String();
+            String Lab2 = new String();
+            String Lab3 = new String();
             while (rs.next()) {
                 Lab1 = rs.getString(1);
                 Lab2 = rs.getString(2);

@@ -70,10 +70,10 @@ public class Home {
             new LaboratorioGUI(controller,frame);
         });
 
-        /*progettobtn.addActionListener(e->{
+        progettobtn.addActionListener(e->{
             frame.setVisible(true);
             new ProgettoGUI(controller,frame);
-        });*/
+        });
 
 
     }
