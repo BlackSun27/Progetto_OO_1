@@ -10,6 +10,7 @@ public class Progetto {
     private float budget;
 
     private ArrayList<String> listaLab = new ArrayList<>();
+    private ArrayList<String> listaInfoImp = new ArrayList<>();
 
     public Progetto(String cup, String ref_sci, String resp, String nome, float budget){
         this.cup = cup;
@@ -73,5 +74,13 @@ public class Progetto {
 
     public ArrayList<String> getListaLab() {
         return listaLab;
+    }
+
+    public void setListaInfoImp(ArrayList<String> listaInfoImp) {
+        this.listaInfoImp = listaInfoImp;
+    }
+
+    public ArrayList<String> getListaInfoImp() {
+        return listaInfoImp;
     }
 }

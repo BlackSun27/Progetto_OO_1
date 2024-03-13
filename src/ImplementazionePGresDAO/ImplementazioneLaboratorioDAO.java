@@ -44,11 +44,11 @@ public class ImplementazioneLaboratorioDAO implements LaboratorioDAO {
 
     @Override
     public void aggiungiAfferente(String nomeLab, String cf) throws SQLException{
-        String queryUti = "INSERT INTO utilizza(cf,nomelab) VALUES (?, ?)";
+        String queryUti = "CALL inserisciutilizza(?,?)";
         PreparedStatement stm = c.prepareStatement(queryUti);
         stm.setString(1, cf);
         stm.setString(2, nomeLab);
-        stm.executeQuery();
+        stm.executeUpdate();
     }
 
     @Override

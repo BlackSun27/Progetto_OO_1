@@ -1,5 +1,6 @@
 package DAO;
 
+import java.sql.Array;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -12,9 +13,7 @@ public interface ProgettoDAO {
 
     public void aggiungiLaboratorio(String cup, String nomeLab) throws SQLException;
 
-    public void getProgResp(String cup, String Cf_Resp);
+    public ArrayList<String> getProgImp(String cup);
 
-    public void getProgRef(String cup, String Cf_Ref);
-
-    public void getLabProg(String cup, String Lab1, String Lab2, String Lab3, ArrayList<String> l_Lab);
+    public void getLabProg(String cup, ArrayList<String> l_Lab);
 }

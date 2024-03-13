@@ -57,7 +57,9 @@ public class AddLaboratorioGUI {
                                 JOptionPane.INFORMATION_MESSAGE);
                         frame.dispose();
                     } catch (SQLException ex) {
-                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "Non posso effettuare l'inserimento" +
+                                " motivo: "+ ex.toString(), "Insuccesso", JOptionPane.PLAIN_MESSAGE);
+                        frame.dispose();
                     }
                 }else{
                     JOptionPane.showMessageDialog(null, "Ci sono campi vuoti! ", "Errore",

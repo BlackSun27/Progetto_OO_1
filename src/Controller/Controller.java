@@ -142,17 +142,23 @@ public class Controller {
         return l_Cognomi;
     }
 
-    public Map<List<String>, List<Date>> getListaPromozioni(String cf){
+    public ArrayList<String> getListaPromozioni(String cf){
         ArrayList<String> promozioni = new ArrayList<>();
         ArrayList<Date> date = new ArrayList<>();
 
         ImpiegatoDAO impDao = new ImplementazioneImpiegatoDAO();
         impDao.getPromozioniImp(cf, promozioni, date);
 
-        Map<List<String>, List<Date>> info_profilo = new HashMap<>();
-        info_profilo.put(promozioni, date);
-
-        return info_profilo;
+        ArrayList<String> info = new ArrayList<>();
+        int n_Ele = promozioni.size() == date.size() ? promozioni.size() : 0;
+        if(n_Ele>0){
+            for(int i = 0; i<n_Ele; i++){
+                String data = date.get(i).toString();
+                info.add(promozioni.get(i));
+                info.add(data);
+            }
+        }
+        return info;
     }
 
     public ArrayList<String> getAfferenzeImp(String cf){
@@ -330,10 +336,11 @@ public class Controller {
 
         ArrayList<String> ProgettoCup = new ArrayList<>();
         laboratorioDAO.getProgLavora(nome, ProgettoCup);
-
-        if (laboratorio != null) {
-            laboratorio.setCup(ProgettoCup.get(0));
-            return ProgettoCup.get(0);
+        if(ProgettoCup.size() != 0) {
+            if (laboratorio != null) {
+                laboratorio.setCup(ProgettoCup.get(0));
+                return ProgettoCup.get(0);
+            }
         }
 
         return null;
@@ -413,11 +420,8 @@ public class Controller {
             break;
         }
 
-        String lab1 = new String();
-        String lab2 = new String();
-        String lab3 = new String();
         ArrayList<String> l_Lab = new ArrayList<>();
-        progettoDAO.getLabProg(cup, lab1, lab2, lab3, l_Lab);
+        progettoDAO.getLabProg(cup, l_Lab);
 
         if (progetto != null) {
             progetto.setListaLab(l_Lab);
@@ -427,45 +431,18 @@ public class Controller {
         return null;
     }
 
-    public String getRespFromCUP(String cup) {
+    public ArrayList<String> getInfoRefResp(String cup){
         ProgettoDAO progettoDAO = new ImplementazioneProgettoDAO();
 
         Progetto progetto = null;
-
-        for (Progetto p : l_Progetti) {
-            if (p.getCup().equals(cup))
+        for(Progetto p : l_Progetti){
+            if(p.getCup().equals(cup))
                 progetto = p;
-            break;
         }
-
-        String Resp = new String();
-        progettoDAO.getProgResp(cup, Resp);
-
-        if (progetto != null) {
-            progetto.setResp(Resp);
-            return Resp;
-        }
-
-        return null;
-    }
-
-    public String getRefFromCUP(String cup) {
-        ProgettoDAO progettoDAO = new ImplementazioneProgettoDAO();
-
-        Progetto progetto = null;
-
-        for (Progetto p : l_Progetti) {
-            if (p.getCup().equals(cup))
-                progetto = p;
-            break;
-        }
-
-        String refSci = new String();
-        progettoDAO.getProgRef(cup, refSci);
-
-        if (progetto != null) {
-            progetto.setRef_sci(refSci);
-            return refSci;
+        ArrayList<String> info = progettoDAO.getProgImp(cup);
+        if(progetto!=null){
+            progetto.setListaInfoImp(info);
+            return info;
         }
 
         return null;

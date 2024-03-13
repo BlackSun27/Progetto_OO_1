@@ -11,7 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.sql.Date;
+import java.io.ObjectStreamException;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
@@ -92,47 +92,46 @@ public class ImpiegatoGUI {
                     selected_cf = impTable.getValueAt(rigaSelezionata, 0).toString();
                 profileTable = new JTable();
 
-                String[] columnTitles = {"Promozioni", "Date", "Laboratorio", "Progetto"};
-
-                Map<List<String>, List<Date>> info_profilo = controller.getListaPromozioni(selected_cf);
-                List<String> promozioni = new ArrayList<>();
-                List<Date> date = new ArrayList<>();
-                for (Map.Entry<List<String>, List<Date>> entry : info_profilo.entrySet()) {
-                    promozioni = entry.getKey();
-                    date = entry.getValue();
-                }
-
-                int numPromozioni = promozioni.size();
-                int numDate = date.size();
-                int maxRows = Math.max(numPromozioni, numDate);
-
+                ArrayList<String> info = controller.getListaPromozioni(selected_cf);;
                 String lab = new String();
                 String prog = new String();
+                int dim = info.size();
                 try {
                     lab = controller.getAfferenzeImp(selected_cf).get(0);
                     prog = controller.getProgettiImp(selected_cf).get(0);
+                    dim++;
                 } catch (NullPointerException ex) {
                     lab = "";
                     prog = "";
                 }
 
-                List<Object[]> righeNonVuote = new ArrayList<>();
 
-                for (int i = 0; i < maxRows; i++) {
-                    Object[] riga = new Object[4];
-                    riga[0] = promozioni.get(i);
-                    riga[1] = date.get(i);
-                    riga[2] = lab != null ? lab : "";
-                    riga[3] = prog != null ? prog : "";
-                    righeNonVuote.add(riga);
+                Object[][] righe_pop;
+                int dim1 = 0;
+                if(lab!=null && prog!=null) {
+                    righe_pop = new Object[dim/2 + 1][2];
+                    righe_pop[0][0] = lab;
+                    righe_pop[0][1] = prog;
+                    dim1++;
+                    for (int i = 0; i < dim/2 + 1; i++) {
+                        if (i + 1 < dim/2 + 1) {
+                            righe_pop[i+1][0] = info.get(2*i);
+                            righe_pop[i+1][1] = info.get(2*i + 1);
+                            dim1++;
+                        }
+                    }
+                }else{
+                    righe_pop = new Object[dim/2 + 1][2];
+                    for (int i = 0; i < dim/2 + 1; i++) {
+                        if (i + 1 < dim) {
+                            righe_pop[i][0] = info.get(2*i);
+                            righe_pop[i][1] = info.get(2*i + 1);
+                            dim1++;
+                        }
+                    }
                 }
 
-                Object[][] rowData = new Object[righeNonVuote.size()][4];
-                for (int i = 0; i < righeNonVuote.size(); i++) {
-                    rowData[i] = righeNonVuote.get(i);
-                }
-
-                DefaultTableModel profileTableModel = new DefaultTableModel(rowData, columnTitles) {
+                DefaultTableModel profileTableModel = new DefaultTableModel(righe_pop, new String[]{"Info imp1", "Info imp2"}) {
                     @Override
                     public boolean isCellEditable(int row, int column) {
                         return false;
