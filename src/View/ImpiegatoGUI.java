@@ -239,7 +239,8 @@ public class ImpiegatoGUI {
                             "Successo", JOptionPane.INFORMATION_MESSAGE);
                     ricaricaTabella(controller, colonne);
                 } catch (SQLException ex) {
-                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Impossibile rimuovere l'impiegato! Motivo: " +
+                            ex.toString(), "Insuccesso", JOptionPane.PLAIN_MESSAGE);
                 }
             }
         });
@@ -258,7 +259,8 @@ public class ImpiegatoGUI {
                                 "Successo", JOptionPane.INFORMATION_MESSAGE);
                         ricaricaTabella(controller, colonne);
                     } catch (SQLException ex) {
-                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "Impossibile promuovere l'impiegato! Motivo: " +
+                                ex.toString(), "Insuccesso", JOptionPane.PLAIN_MESSAGE);
                     }
                 } else {
                     try {
@@ -268,7 +270,8 @@ public class ImpiegatoGUI {
                                 JOptionPane.INFORMATION_MESSAGE);
                         ricaricaTabella(controller, colonne);
                     } catch (SQLException ex) {
-                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "Impossibile promuovere l'impiegato! Motivo: " +
+                                ex.toString(), "Insuccesso", JOptionPane.PLAIN_MESSAGE);
                     }
                 }
             }

@@ -425,10 +425,9 @@ public class Controller {
 
         if (progetto != null) {
             progetto.setListaLab(l_Lab);
-            return l_Lab;
         }
 
-        return null;
+        return l_Lab;
     }
 
     public ArrayList<String> getInfoRefResp(String cup){
@@ -436,8 +435,10 @@ public class Controller {
 
         Progetto progetto = null;
         for(Progetto p : l_Progetti){
-            if(p.getCup().equals(cup))
+            if(p.getCup().equals(cup)) {
                 progetto = p;
+                break;
+            }
         }
         ArrayList<String> info = progettoDAO.getProgImp(cup);
         if(progetto!=null){

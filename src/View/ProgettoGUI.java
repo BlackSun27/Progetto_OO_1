@@ -107,13 +107,18 @@ public class ProgettoGUI {
                 righe[1][0] = labs.get(0);
                 righe[1][1] = labs.get(1);
                 righe[1][2] = labs.get(2);
+                int inc = 0;
                 for(int i=2; i<4; i++){
-                    for(int j = 0; j<3; j++)
-                        righe[i][j] = info.get(i-2 + j);
+                    for(int j = 0; j<3; j++) {
+                        inc = (i-2) * 3 + j;
+                        if(inc<info.size()) {
+                            righe[i][j] = info.get(inc);
+                        }
+                    }
                 }
 
 
-                DefaultTableModel profileTableModel = new DefaultTableModel(colonne, new String[]{"Info Lab."}) {
+                DefaultTableModel profileTableModel = new DefaultTableModel(righe, new String[]{"Info Prog1.", "Info Prog2.", "Info Prog3."}) {
                     @Override
                     public boolean isCellEditable(int row, int column) {
                         return false;
@@ -150,7 +155,7 @@ public class ProgettoGUI {
 
         jsp = new JScrollPane(progTable);
         jsp.setPreferredSize(new Dimension(700, 400));
-        addBtn = new JButton("Aggiungi Lab");
+        addBtn = new JButton("Aggiungi Prog");
         removeBtn = new JButton("Rimuovi");
         newLabBtn = new JButton("Nuovo Laboratorio");
         backBtn = new JButton("Torna alla Home");
@@ -199,5 +204,100 @@ public class ProgettoGUI {
             prevFrame.setVisible(true);
             frame.dispose();
         });
+
+        removeBtn.addActionListener(e->{
+            String cup = progTable.getValueAt(progTable.getSelectedRow(), 0).toString();
+            int selection = JOptionPane.showConfirmDialog(null, "Sicuro di voler rimuovere il progetto?",
+                    "Conferma", JOptionPane.YES_NO_OPTION);
+
+            if(selection == JOptionPane.YES_OPTION){
+                try {
+                    controller.rimuoviProgetto(cup);
+                    JOptionPane.showMessageDialog(null, "Rimozione avvenuta con successo! ", "Conferma",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    ricaricaTabella(controller, colonne);
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Impossibile rimuovere il progetto! Motivo: " +
+                            ex.toString() , "Insuccesso", JOptionPane.PLAIN_MESSAGE);
+                }
+            }
+        });
+
+        newLabBtn.addActionListener(e->{
+            int rigaSelezionata = progTable.getSelectedRow();
+            String cup = "";
+            if(rigaSelezionata != -1)
+                cup = progTable.getValueAt(rigaSelezionata, 0).toString();
+            int selezione = JOptionPane.showConfirmDialog(null, "Vuoi aggiungere un nuovo afferente?",
+                    "Conferma", JOptionPane.YES_NO_OPTION);
+            laboratorioAddPanel = new JPanel();
+            laboratorioAddPanel.setLayout(new BoxLayout(laboratorioAddPanel, BoxLayout.Y_AXIS));
+            if(selezione == JOptionPane.YES_OPTION){
+                laboratorioLabel = new JLabel("Lab: ");
+                laboratorioField = new JTextField(20);
+                laboratorioAddPanel.add(laboratorioLabel);
+                laboratorioAddPanel.add(laboratorioField);
+                JOptionPane.showMessageDialog(null, laboratorioAddPanel, "Inserisci il CF",
+                        JOptionPane.PLAIN_MESSAGE);
+
+                String lab = laboratorioField.getText();
+                try {
+                    controller.aggiungiLaboratorio(cup, lab);
+                    JOptionPane.showMessageDialog(null, "Inserimento avvenuto con successo!", "Successo",
+                            JOptionPane.PLAIN_MESSAGE);
+                    ricaricaTabella(controller, colonne);
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Inserimento non effettuato, motivo: " + ex.toString(),
+                            "Insuccesso", JOptionPane.PLAIN_MESSAGE);
+                }
+            }
+        });
+
+        addBtn.addActionListener(e->{
+            AddProgettoGUI addProgettoGUI = new AddProgettoGUI(controller);
+            addProgettoGUI.frame.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    ricaricaTabella(controller, colonne);
+                }
+            });
+        });
+    }
+
+    private void ricaricaTabella(Controller controller, String[] colonne) {
+        if (controller != null && colonne.length != 0) {
+            List<Progetto> laboratori = controller.getProgettiDB();
+            Set<String> cupSet = new HashSet<>();
+            for(Progetto lab: laboratori){
+                String cup = lab.getCup();
+                if(!cupSet.contains(cup))
+                    cupSet.add(cup);
+                else
+                    break;
+            }
+
+            Object[][] righe = new Object[cupSet.size()][colonne.length];
+            for (int i = 0; i < cupSet.size(); i++) {
+                Progetto lab = laboratori.get(i);
+                righe[i][0] = lab.getCup();
+                righe[i][1] = lab.getRef_sci();
+                righe[i][2] = lab.getResp();
+                righe[i][3] = lab.getNome();
+                righe[i][4] = lab.getBudget();
+            }
+
+            DefaultTableModel dtm = new DefaultTableModel(righe, colonne) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
+
+            progTable.setModel(dtm);
+            progTable.setRowHeight(30);
+            progTable.getTableHeader().setReorderingAllowed(false);
+            progTable.getTableHeader().setResizingAllowed(false);
+            progTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        }
     }
 }
