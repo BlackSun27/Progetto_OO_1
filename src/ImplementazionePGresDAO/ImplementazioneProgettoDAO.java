@@ -24,13 +24,13 @@ public class ImplementazioneProgettoDAO implements ProgettoDAO {
     @Override
     public void inserisciProgetto(String cup, String refSci, String resp, String nome, float budget)
             throws SQLException {
-        String query = "CALL inserisciprogetto(?,?,?,?,?); ";
+        String query = "CALL inserisciprogetto(?,?,?,?,?::NUMERIC); ";
         PreparedStatement stm = c.prepareStatement(query);
         stm.setString(1, cup);
         stm.setString(2, refSci);
         stm.setString(3, resp);
         stm.setString(4, nome);
-        stm.setDouble(5, budget);
+        stm.setString(5, String.valueOf(budget));
 
         stm.executeUpdate();
     }
@@ -91,10 +91,18 @@ public class ImplementazioneProgettoDAO implements ProgettoDAO {
                 Lab2 = rs.getString(2);
                 Lab3 = rs.getString(3);
             }
-
-            l_Lab.add(Lab1);
-            l_Lab.add(Lab2);
-            l_Lab.add(Lab3);
+            if(Lab1!=null)
+                l_Lab.add(Lab1);
+            else
+                l_Lab.add("");
+            if(Lab2!=null)
+                l_Lab.add(Lab2);
+            else
+                l_Lab.add("");
+            if(Lab3!=null)
+                l_Lab.add(Lab3);
+            else
+                l_Lab.add("");
 
         }catch (SQLException e){
             e.printStackTrace();

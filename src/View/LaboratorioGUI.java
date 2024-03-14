@@ -203,7 +203,8 @@ public class LaboratorioGUI {
                             JOptionPane.INFORMATION_MESSAGE);
                     ricaricaTabella(controller, colonne);
                 } catch (SQLException ex) {
-                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Impossibile rimuovere il laboratorio! Motivo: " +
+                            ex.toString() , "Insuccesso", JOptionPane.PLAIN_MESSAGE);
                 }
             }
         });

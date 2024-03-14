@@ -105,7 +105,9 @@ public class AddImpiegatoGUI {
                                 JOptionPane.INFORMATION_MESSAGE);
                         frame.dispose();
                     } catch (SQLException ex) {
-                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "Non puo' proseguire l'inserimento", "Errore",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        frame.dispose();
                     }
                 }else{
                     JOptionPane.showMessageDialog(null, "Ci sono campi vuoti! ", "Errore",
