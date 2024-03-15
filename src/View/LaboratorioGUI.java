@@ -16,9 +16,9 @@ import java.util.*;
 import java.util.List;
 
 public class LaboratorioGUI {
+    JFrame frame;
     private JPanel laboratorioMainPanel;
     private JButton backBtn;
-    JFrame frame;
     private JButton addBtn;
     private JButton removeBtn;
     private JButton newAffBtn;
@@ -30,9 +30,10 @@ public class LaboratorioGUI {
     private JTextField afferenteField;
     private JLabel afferenteLabel;
     private JPanel afferenteAddPanel;
+
     public LaboratorioGUI(Controller controller, JFrame prevFrame){
-        laboratorioMainPanel = new JPanel();
-        profilePanel = new JPanel();
+        JPanel laboratorioMainPanel = new JPanel();
+        JPanel profilePanel = new JPanel();
         frame = new JFrame("Laboratorio");
         frame.setSize(1280, 720);
         frame.setResizable(false);
@@ -41,7 +42,7 @@ public class LaboratorioGUI {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
 
-        String colonne[] = {"Nome", "Resp. Scien.", "Topic", "Num. Afferenti"};
+        String[] colonne = {"Nome", "Resp. Scien.", "Topic", "Num. Afferenti"};
 
         List<Laboratorio> laboratori = controller.getLaboratoriDB();
         Set<String> nomiSet = new HashSet<>();
@@ -73,7 +74,7 @@ public class LaboratorioGUI {
             dtm.addRow(riga);
         }
 
-        labTable = new JTable();
+        JTable labTable = new JTable();
         labTable.setModel(dtm);
         labTable.setRowHeight(30);
         labTable.getTableHeader().setReorderingAllowed(false);
@@ -87,15 +88,13 @@ public class LaboratorioGUI {
                 String nome = "";
                 if(rigaSelezionata != -1)
                     nome = labTable.getValueAt(rigaSelezionata, 0).toString();
-                profileTable = new JTable();
+                JTable profileTable = new JTable();
                 ArrayList<String> info_lab = new ArrayList<>();
                 String prog = controller.getCUPfromLab(nome);
                 if(prog!=null)
                     info_lab.add(prog);
                 ArrayList<String> info_resp = controller.getRespSciLab(nome);
-                for(int i =0; i<info_resp.size(); i++){
-                    info_lab.add(info_resp.get(i));
-                }
+                info_lab.addAll(info_resp);
 
                 Object[][] colonne = new Object[info_lab.size()][1];
 
@@ -139,14 +138,14 @@ public class LaboratorioGUI {
             }
         });
 
-        jsp = new JScrollPane(labTable);
+        JScrollPane jsp = new JScrollPane(labTable);
         jsp.setPreferredSize(new Dimension(700, 400));
-        addBtn = new JButton("Aggiungi Lab");
-        removeBtn = new JButton("Rimuovi");
-        newAffBtn = new JButton("Nuovo Afferente");
-        backBtn = new JButton("Torna alla Home");
+        JButton addBtn = new JButton("Aggiungi Lab");
+        JButton removeBtn = new JButton("Rimuovi");
+        JButton newAffBtn = new JButton("Nuovo Afferente");
+        JButton backBtn = new JButton("Torna alla Home");
 
-        btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         btnPanel.add(addBtn);
         btnPanel.add(removeBtn);
         btnPanel.add(newAffBtn);
@@ -192,51 +191,58 @@ public class LaboratorioGUI {
         });
 
         removeBtn.addActionListener(e->{
-            String nome = labTable.getValueAt(labTable.getSelectedRow(), 0).toString();
-            int selection = JOptionPane.showConfirmDialog(null, "Sicuro di voler rimuovere il laboratorio?",
-                    "Conferma", JOptionPane.YES_NO_OPTION);
+            try {
+                String nome = labTable.getValueAt(labTable.getSelectedRow(), 0).toString();
+                int selection = JOptionPane.showConfirmDialog(null, "Sicuro di voler rimuovere il laboratorio?",
+                        "Conferma", JOptionPane.YES_NO_OPTION);
 
-            if(selection == JOptionPane.YES_OPTION){
-                try {
-                    controller.rimuoviLab(nome);
-                    JOptionPane.showMessageDialog(null, "Rimozione avvenuta con successo! ", "Conferma",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    ricaricaTabella(controller, colonne);
-                } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, "Impossibile rimuovere il laboratorio! Motivo: " +
-                            ex.toString() , "Insuccesso", JOptionPane.PLAIN_MESSAGE);
+                if (selection == JOptionPane.YES_OPTION) {
+                    try {
+                        controller.rimuoviLab(nome);
+                        JOptionPane.showMessageDialog(null, "Rimozione avvenuta con successo! ", "Conferma",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        ricaricaTabella(controller, colonne);
+                    } catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(null, "Impossibile rimuovere il laboratorio! Motivo: " +
+                                ex, "Insuccesso", JOptionPane.PLAIN_MESSAGE);
+                    }
                 }
+            }catch (ArrayIndexOutOfBoundsException ex){
+                JOptionPane.showMessageDialog(null, "Non e' stato selezionato alcun nome! ", "Insuccesso",
+                        JOptionPane.PLAIN_MESSAGE);
             }
         });
 
         newAffBtn.addActionListener(e->{
-             int rigaSelezionata = labTable.getSelectedRow();
-             String nome = "";
-             if(rigaSelezionata != -1)
-                nome = labTable.getValueAt(rigaSelezionata, 0).toString();
-             int selezione = JOptionPane.showConfirmDialog(null, "Vuoi aggiungere un nuovo afferente?",
-                     "Conferma", JOptionPane.YES_NO_OPTION);
-             afferenteAddPanel = new JPanel();
-             afferenteAddPanel.setLayout(new BoxLayout(afferenteAddPanel, BoxLayout.Y_AXIS));
-             if(selezione == JOptionPane.YES_OPTION){
-                 afferenteLabel = new JLabel("CF: ");
-                 afferenteField = new JTextField(20);
-                 afferenteAddPanel.add(afferenteLabel);
-                 afferenteAddPanel.add(afferenteField);
-                 JOptionPane.showMessageDialog(null, afferenteAddPanel, "Inserisci il CF",
-                         JOptionPane.PLAIN_MESSAGE);
+            try {
+                String nome = labTable.getValueAt(labTable.getSelectedRow(), 0).toString();
+                int selezione = JOptionPane.showConfirmDialog(null, "Vuoi aggiungere un nuovo afferente?",
+                        "Conferma", JOptionPane.YES_NO_OPTION);
+                JPanel afferenteAddPanel = new JPanel();
+                afferenteAddPanel.setLayout(new BoxLayout(afferenteAddPanel, BoxLayout.Y_AXIS));
+                if (selezione == JOptionPane.YES_OPTION) {
+                    JLabel afferenteLabel = new JLabel("CF: ");
+                    JTextField afferenteField = new JTextField(20);
+                    afferenteAddPanel.add(afferenteLabel);
+                    afferenteAddPanel.add(afferenteField);
+                    JOptionPane.showMessageDialog(null, afferenteAddPanel, "Inserisci il CF",
+                            JOptionPane.PLAIN_MESSAGE);
 
-                 String cf = afferenteField.getText();
-                 try {
-                     controller.aggiungiAfferenteLab(nome, cf);
-                     JOptionPane.showMessageDialog(null, "Inserimento avvenuto con successo!", "Successo",
-                             JOptionPane.PLAIN_MESSAGE);
-                     ricaricaTabella(controller, colonne);
-                 } catch (SQLException ex) {
-                     JOptionPane.showMessageDialog(null, "Inserimento non effettuato, motivo: " + ex.toString(),
-                             "Insuccesso", JOptionPane.PLAIN_MESSAGE);
-                 }
-             }
+                    String cf = afferenteField.getText();
+                    try {
+                        controller.aggiungiAfferenteLab(nome, cf);
+                        JOptionPane.showMessageDialog(null, "Inserimento avvenuto con successo!", "Successo",
+                                JOptionPane.PLAIN_MESSAGE);
+                        ricaricaTabella(controller, colonne);
+                    } catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(null, "Inserimento non effettuato, motivo: " + ex,
+                                "Insuccesso", JOptionPane.PLAIN_MESSAGE);
+                    }
+                }
+            }catch (ArrayIndexOutOfBoundsException ex){
+                JOptionPane.showMessageDialog(null, "Non e' stato selezionato alcun nome! ", "Insuccesso",
+                        JOptionPane.PLAIN_MESSAGE);
+            }
         });
 
         addBtn.addActionListener(e->{
@@ -278,7 +284,7 @@ public class LaboratorioGUI {
                     return false;
                 }
             };
-
+            JTable labTable = new JTable();
             labTable.setModel(dtm);
             labTable.setRowHeight(30);
             labTable.getTableHeader().setReorderingAllowed(false);

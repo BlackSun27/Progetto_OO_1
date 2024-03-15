@@ -21,7 +21,7 @@ public class AddProgettoGUI {
     private JButton okBtn;
 
     public AddProgettoGUI(Controller controller){
-        progettoPanel = new JPanel();
+        JPanel progettoPanel = new JPanel();
         progettoPanel.setLayout(new BoxLayout(progettoPanel, BoxLayout.Y_AXIS));
         frame = new JFrame("Inserimento progetto");
         frame.setContentPane(progettoPanel);
@@ -30,16 +30,16 @@ public class AddProgettoGUI {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        cupLabel = new JLabel("CUP: ");
-        cupTextField = new JTextField(20);
-        resp_sciLabel = new JLabel("CF Responsabile: ");
-        resp_sciField = new JTextField(20);
-        refSciLabel = new JLabel("CF Referente Scientifico: ");
-        refSciField = new JTextField(20);
-        nomeLabel = new JLabel("Nome: ");
-        nomeTextField = new JTextField(20);
-        budgetLabel = new JLabel("Budget: ");
-        budgetField = new JTextField(20);
+        JLabel cupLabel = new JLabel("CUP: ");
+        JTextField cupTextField = new JTextField(20);
+        JLabel resp_sciLabel = new JLabel("CF Responsabile: ");
+        JTextField resp_sciField = new JTextField(20);
+        JLabel refSciLabel = new JLabel("CF Referente Scientifico: ");
+        JTextField refSciField = new JTextField(20);
+        JLabel nomeLabel = new JLabel("Nome: ");
+        JTextField nomeTextField = new JTextField(20);
+        JLabel budgetLabel = new JLabel("Budget: ");
+        JTextField budgetField = new JTextField(20);
 
         progettoPanel.add(cupLabel);
         progettoPanel.add(cupTextField);
@@ -52,7 +52,7 @@ public class AddProgettoGUI {
         progettoPanel.add(budgetLabel);
         progettoPanel.add(budgetField);
 
-        okBtn = new JButton("OK");
+        JButton okBtn = new JButton("OK");
         progettoPanel.add(okBtn);
 
         okBtn.addActionListener(e -> {
@@ -72,7 +72,7 @@ public class AddProgettoGUI {
                         frame.dispose();
                     } catch (SQLException ex) {
                         JOptionPane.showMessageDialog(null, "Non posso effettuare l'inserimento" +
-                                " motivo: "+ ex.toString(), "Insuccesso", JOptionPane.PLAIN_MESSAGE);
+                                " motivo: "+ ex, "Insuccesso", JOptionPane.PLAIN_MESSAGE);
                         frame.dispose();
                     }
                 }else{
