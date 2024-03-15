@@ -5,13 +5,12 @@ import java.util.ArrayList;
 
 public interface LaboratorioDAO {
 
-    public void inserisciLaboratorio(String nomeLab, String respSci, String topic)
+    void inserisciLaboratorio(String nomeLab, String respSci, String topic)
             throws SQLException;
 
-    public void rimuoviLaboratorio(String nomeLab) throws SQLException;
+    void rimuoviLaboratorio(String nomeLab) throws SQLException;
 
-    public void aggiungiAfferente(String nomeLab, String cf) throws SQLException;
-
+    void aggiungiAfferente(String nomeLab, String cf) throws SQLException;
 
     void afferenzeLab(String nomelab, ArrayList<String> l_CF);
 

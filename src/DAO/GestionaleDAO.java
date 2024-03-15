@@ -5,20 +5,20 @@ import java.util.ArrayList;
 //ogni l_ fa riferimento al fatto che è una variabile lista -> l_cf = lista codici fiscali
 public interface GestionaleDAO {
 
-    public void getImpiegati(ArrayList<String> l_CF, ArrayList<String> l_Nomi, ArrayList<String> l_Cognomi,
+    void getImpiegati(ArrayList<String> l_CF, ArrayList<String> l_Nomi, ArrayList<String> l_Cognomi,
                              ArrayList<Date> l_DateNascita, ArrayList<Date> l_DateAssunzioni,
                              ArrayList<String> l_Contratti, ArrayList<Boolean> l_Merito,
                              ArrayList<Float> l_Salari, ArrayList<String> l_Categorie, ArrayList<Integer> l_Eta);
 
-    public void getPromozioni(ArrayList<String> l_CF, ArrayList<Date> l_DatePassaggio,
+    void getPromozioni(ArrayList<String> l_CF, ArrayList<Date> l_DatePassaggio,
                               ArrayList<String> l_Contratti, ArrayList<String> l_VecchieCategorie,
                               ArrayList<String> l_NuoveCategorie);
 
-    public void getLaboratori(ArrayList<String> l_Nomi, ArrayList<String> l_RespSci,
+    void getLaboratori(ArrayList<String> l_Nomi, ArrayList<String> l_RespSci,
                               ArrayList<String> l_Topic, ArrayList<Integer> l_NumeroAfferenti);
 
-    public void getProgetti(ArrayList<String> l_CUP, ArrayList<String> l_RefSci, ArrayList<String> l_Resp,
+    void getProgetti(ArrayList<String> l_CUP, ArrayList<String> l_RefSci, ArrayList<String> l_Resp,
                             ArrayList<String> l_Nomi, ArrayList<Float> l_Budget);
 
-    public void getAfferenti(String nomeLab, ArrayList<String> l_CF);
+    void getAfferenti(String nomeLab, ArrayList<String> l_CF);
 }

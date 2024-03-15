@@ -6,14 +6,14 @@ import java.util.ArrayList;
 
 public interface ImpiegatoDAO {
 
-    public void inserisciImpiegato(String cf, String nome, String cognome, Date dataNascita, Date dataAssunzione, String codiceCon,
+    void inserisciImpiegato(String cf, String nome, String cognome, Date dataNascita, Date dataAssunzione, String codiceCon,
                                    boolean merito, float salario, String categoria, int eta) throws SQLException;
 
-    public void rimuoviImpiegato(String cf) throws SQLException;
+    void rimuoviImpiegato(String cf) throws SQLException;
 
-    public void promuoviImpiegato(String cf, boolean merito) throws SQLException;
+    void promuoviImpiegato(String cf, boolean merito) throws SQLException;
 
-    public void getAfferenzeImp(String cf, ArrayList<String> laboratorio);
+    void getAfferenzeImp(String cf, ArrayList<String> laboratorio);
 
     void getProgettiLab(String cf, ArrayList<String> progetto);
 
