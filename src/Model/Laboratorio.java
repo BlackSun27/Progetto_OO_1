@@ -6,7 +6,7 @@ public class Laboratorio {
     private String nome;
     private String resp_sci;
     private String topic;
-    private int n_afferenti = 0;
+    private int n_afferenti = 1;
 
     private ArrayList<String> listAfferenti = new ArrayList<>();
     private String cup = new String();

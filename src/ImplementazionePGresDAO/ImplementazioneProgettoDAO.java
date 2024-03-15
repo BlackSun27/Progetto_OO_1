@@ -8,12 +8,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ImplementazioneProgettoDAO implements ProgettoDAO {
-    private DbConn db;
+    //private DbConn db;
     private Connection c;
     public ImplementazioneProgettoDAO() {
-        db = new DbConn();
+        DbConn db = new DbConn();
         try {
             c = db.conn_db("postgres", "postgres", "Blacks_27");
         } catch (SQLException e) {
@@ -83,26 +84,17 @@ public class ImplementazioneProgettoDAO implements ProgettoDAO {
             stm.setString(1, cup);
 
             ResultSet rs = stm.executeQuery();
-            String Lab1 = new String();
-            String Lab2 = new String();
-            String Lab3 = new String();
+            String Lab1 = null;
+            String Lab2 = null;
+            String Lab3 = null;
             while (rs.next()) {
                 Lab1 = rs.getString(1);
                 Lab2 = rs.getString(2);
                 Lab3 = rs.getString(3);
             }
-            if(Lab1!=null)
-                l_Lab.add(Lab1);
-            else
-                l_Lab.add("");
-            if(Lab2!=null)
-                l_Lab.add(Lab2);
-            else
-                l_Lab.add("");
-            if(Lab3!=null)
-                l_Lab.add(Lab3);
-            else
-                l_Lab.add("");
+            l_Lab.add(Objects.requireNonNullElse(Lab1, null));
+            l_Lab.add(Objects.requireNonNullElse(Lab2, null));
+            l_Lab.add(Objects.requireNonNullElse(Lab3, null));
 
         }catch (SQLException e){
             e.printStackTrace();

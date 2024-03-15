@@ -9,25 +9,22 @@ import java.awt.*;
 public class Home {
 
     private JPanel mainPanel;
-    private JButton impiegatobtn;
-    private JButton laboratoriobtn;
-    private JButton progettobtn;
     private JPanel btnPanel;
 
     public Home(){
         Controller controller = new Controller();
 
         JFrame frame = new JFrame("Sistema di gestione del personale in un'azienda");
-        mainPanel = new JPanel();
+        JPanel mainPanel = new JPanel();
         frame.setSize(800, 500);
         frame.setLocationRelativeTo(null);
         frame.setContentPane(mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
-        impiegatobtn = new JButton("Impiegato");
-        laboratoriobtn = new JButton("Laboratorio");
-        progettobtn = new JButton("Progetto");
+        JButton impiegatobtn = new JButton("Impiegato");
+        JButton laboratoriobtn = new JButton("Laboratorio");
+        JButton progettobtn = new JButton("Progetto");
         JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonsPanel.add(impiegatobtn);
         buttonsPanel.add(laboratoriobtn);

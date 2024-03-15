@@ -1,7 +1,6 @@
 package View;
 
 import Controller.*;
-import Model.Laboratorio;
 import Model.Progetto;
 
 import javax.swing.*;
@@ -18,9 +17,9 @@ import java.util.List;
 
 
 public class ProgettoGUI {
+    JFrame frame;
     private JPanel progettoMainPanel;
     private JButton backBtn;
-    JFrame frame;
     private JButton addBtn;
     private JButton removeBtn;
     private JButton newLabBtn;
@@ -34,8 +33,8 @@ public class ProgettoGUI {
     private JPanel laboratorioAddPanel;
 
     public ProgettoGUI(Controller controller, Frame prevFrame){
-        progettoMainPanel = new JPanel();
-        profilePanel = new JPanel();
+        JPanel progettoMainPanel = new JPanel();
+        JPanel profilePanel = new JPanel();
         frame = new JFrame("Progetto");
         frame.setSize(1280, 720);
         frame.setResizable(false);
@@ -44,7 +43,7 @@ public class ProgettoGUI {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
 
-        String colonne[] = {"CUP", "Ref. Scien.", "Resp.", "Nome", "Budget"};
+        String[] colonne = {"CUP", "Ref. Scien.", "Resp.", "Nome", "Budget"};
 
         List<Progetto> progetti = controller.getProgettiDB();
         Set<String> cupSet = new HashSet<>();
@@ -76,7 +75,7 @@ public class ProgettoGUI {
             dtm.addRow(riga);
         }
 
-        progTable = new JTable();
+        JTable progTable = new JTable();
         progTable.setModel(dtm);
         progTable.setRowHeight(30);
         progTable.getTableHeader().setReorderingAllowed(false);
@@ -95,7 +94,7 @@ public class ProgettoGUI {
                     nome = progTable.getValueAt(rigaSelezionata, 3).toString();
                     budget = Float.parseFloat(progTable.getValueAt(rigaSelezionata, 4).toString());
                 }
-                profileTable = new JTable();
+                JTable profileTable = new JTable();
                 ArrayList<String> labs = new ArrayList<>();
                 labs = controller.getLabFromCUP(cup);
                 ArrayList<String> info = controller.getInfoRefResp(cup);
@@ -153,14 +152,14 @@ public class ProgettoGUI {
             }
         });
 
-        jsp = new JScrollPane(progTable);
+        JScrollPane jsp = new JScrollPane(progTable);
         jsp.setPreferredSize(new Dimension(700, 400));
-        addBtn = new JButton("Aggiungi Prog");
-        removeBtn = new JButton("Rimuovi");
-        newLabBtn = new JButton("Nuovo Laboratorio");
-        backBtn = new JButton("Torna alla Home");
+        JButton addBtn = new JButton("Aggiungi Prog");
+        JButton removeBtn = new JButton("Rimuovi");
+        JButton newLabBtn = new JButton("Nuovo Laboratorio");
+        JButton backBtn = new JButton("Torna alla Home");
 
-        btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         btnPanel.add(addBtn);
         btnPanel.add(removeBtn);
         btnPanel.add(newLabBtn);
@@ -206,50 +205,57 @@ public class ProgettoGUI {
         });
 
         removeBtn.addActionListener(e->{
-            String cup = progTable.getValueAt(progTable.getSelectedRow(), 0).toString();
-            int selection = JOptionPane.showConfirmDialog(null, "Sicuro di voler rimuovere il progetto?",
-                    "Conferma", JOptionPane.YES_NO_OPTION);
+            try {
+                String cup = progTable.getValueAt(progTable.getSelectedRow(), 0).toString();
+                int selection = JOptionPane.showConfirmDialog(null, "Sicuro di voler rimuovere il progetto?",
+                        "Conferma", JOptionPane.YES_NO_OPTION);
 
-            if(selection == JOptionPane.YES_OPTION){
-                try {
-                    controller.rimuoviProgetto(cup);
-                    JOptionPane.showMessageDialog(null, "Rimozione avvenuta con successo! ", "Conferma",
-                            JOptionPane.INFORMATION_MESSAGE);
-                    ricaricaTabella(controller, colonne);
-                } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, "Impossibile rimuovere il progetto! Motivo: " +
-                            ex.toString() , "Insuccesso", JOptionPane.PLAIN_MESSAGE);
+                if (selection == JOptionPane.YES_OPTION) {
+                    try {
+                        controller.rimuoviProgetto(cup);
+                        JOptionPane.showMessageDialog(null, "Rimozione avvenuta con successo! ", "Conferma",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        ricaricaTabella(controller, colonne);
+                    } catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(null, "Impossibile rimuovere il progetto! Motivo: " +
+                                ex, "Insuccesso", JOptionPane.PLAIN_MESSAGE);
+                    }
                 }
+            }catch (ArrayIndexOutOfBoundsException ex){
+                JOptionPane.showMessageDialog(null, "Nessun cup e' stato selezionato!", "Insuccesso",
+                        JOptionPane.PLAIN_MESSAGE);
             }
         });
 
         newLabBtn.addActionListener(e->{
-            int rigaSelezionata = progTable.getSelectedRow();
-            String cup = "";
-            if(rigaSelezionata != -1)
-                cup = progTable.getValueAt(rigaSelezionata, 0).toString();
-            int selezione = JOptionPane.showConfirmDialog(null, "Vuoi aggiungere un nuovo afferente?",
-                    "Conferma", JOptionPane.YES_NO_OPTION);
-            laboratorioAddPanel = new JPanel();
-            laboratorioAddPanel.setLayout(new BoxLayout(laboratorioAddPanel, BoxLayout.Y_AXIS));
-            if(selezione == JOptionPane.YES_OPTION){
-                laboratorioLabel = new JLabel("Lab: ");
-                laboratorioField = new JTextField(20);
-                laboratorioAddPanel.add(laboratorioLabel);
-                laboratorioAddPanel.add(laboratorioField);
-                JOptionPane.showMessageDialog(null, laboratorioAddPanel, "Inserisci il CF",
-                        JOptionPane.PLAIN_MESSAGE);
-
-                String lab = laboratorioField.getText();
-                try {
-                    controller.aggiungiLaboratorio(cup, lab);
-                    JOptionPane.showMessageDialog(null, "Inserimento avvenuto con successo!", "Successo",
+            try {
+                String cup = progTable.getValueAt(progTable.getSelectedRow(), 0).toString();
+                int selezione = JOptionPane.showConfirmDialog(null, "Vuoi aggiungere un nuovo laboratorio?",
+                        "Conferma", JOptionPane.YES_NO_OPTION);
+                JPanel laboratorioAddPanel = new JPanel();
+                laboratorioAddPanel.setLayout(new BoxLayout(laboratorioAddPanel, BoxLayout.Y_AXIS));
+                if (selezione == JOptionPane.YES_OPTION) {
+                    JLabel laboratorioLabel = new JLabel("Lab: ");
+                    JTextField laboratorioField = new JTextField(20);
+                    laboratorioAddPanel.add(laboratorioLabel);
+                    laboratorioAddPanel.add(laboratorioField);
+                    JOptionPane.showMessageDialog(null, laboratorioAddPanel, "Inserisci il Nome",
                             JOptionPane.PLAIN_MESSAGE);
-                    ricaricaTabella(controller, colonne);
-                } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, "Inserimento non effettuato, motivo: " + ex.toString(),
-                            "Insuccesso", JOptionPane.PLAIN_MESSAGE);
+
+                    String lab = laboratorioField.getText();
+                    try {
+                        controller.aggiungiLaboratorio(cup, lab);
+                        JOptionPane.showMessageDialog(null, "Inserimento avvenuto con successo!", "Successo",
+                                JOptionPane.PLAIN_MESSAGE);
+                        ricaricaTabella(controller, colonne);
+                    } catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(null, "Inserimento non effettuato, motivo: " + ex,
+                                "Insuccesso", JOptionPane.PLAIN_MESSAGE);
+                    }
                 }
+            }catch (ArrayIndexOutOfBoundsException ex) {
+                JOptionPane.showMessageDialog(null, "Nessun cup e' stato selezionato!", "Insuccesso",
+                        JOptionPane.PLAIN_MESSAGE);
             }
         });
 
@@ -293,6 +299,7 @@ public class ProgettoGUI {
                 }
             };
 
+            JTable progTable = new JTable();
             progTable.setModel(dtm);
             progTable.setRowHeight(30);
             progTable.getTableHeader().setReorderingAllowed(false);

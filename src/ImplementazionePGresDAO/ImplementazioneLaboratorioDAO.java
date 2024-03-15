@@ -10,10 +10,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ImplementazioneLaboratorioDAO implements LaboratorioDAO {
-    private DbConn db;
+    //private DbConn db;
     private Connection c;
     public ImplementazioneLaboratorioDAO() {
-        db = new DbConn();
+        DbConn db = new DbConn();
         try {
             c = db.conn_db("postgres", "postgres", "Blacks_27");
         } catch (SQLException e) {
@@ -72,10 +72,11 @@ public class ImplementazioneLaboratorioDAO implements LaboratorioDAO {
     @Override
     public void getRespSci(String nomelab, ArrayList<String> resp){
         try{
-            String query = "SELECT i.cf, i.nome, i.cognome\n" +
-                    "FROM laboratorio AS u\n" +
-                    "JOIN Impiegato AS i ON u.respscie = i.cf\n" +
-                    "WHERE u.nome = ?";
+            String query = """
+                    SELECT i.cf, i.nome, i.cognome
+                    FROM laboratorio AS u
+                    JOIN Impiegato AS i ON u.respscie = i.cf
+                    WHERE u.nome = ?""";
             PreparedStatement stm = c.prepareStatement(query);
             stm.setString(1, nomelab);
 

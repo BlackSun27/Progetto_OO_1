@@ -25,7 +25,7 @@ public class AddImpiegatoGUI {
     private JButton okBtn;
 
     public AddImpiegatoGUI(Controller controller){
-        impMainPanel = new JPanel();
+        JPanel impMainPanel = new JPanel();
         impMainPanel.setLayout(new BoxLayout(impMainPanel, BoxLayout.Y_AXIS));
         frame = new JFrame("Inserimento Impiegati");
         frame.setContentPane(impMainPanel);
@@ -34,18 +34,18 @@ public class AddImpiegatoGUI {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        cfLabel = new JLabel("CF:");
-        cfTextField = new JTextField(20);
-        nomeLabel = new JLabel("Nome:");
-        nomeTextField = new JTextField(20);
-        cognomeLabel = new JLabel("Cognome:");
-        cognomeTextField = new JTextField(20);
-        dataNascitaLabel = new JLabel("Data di nascita (anno-mese-giorno):");
-        dataNascitaField = new JTextField(20);
-        codiceConLabel = new JLabel("Codice Contratto:");
-        codiceConField = new JTextField(20);
+        JLabel cfLabel = new JLabel("CF:");
+        JTextField cfTextField = new JTextField(20);
+        JLabel nomeLabel = new JLabel("Nome:");
+        JTextField nomeTextField = new JTextField(20);
+        JLabel cognomeLabel = new JLabel("Cognome:");
+        JTextField cognomeTextField = new JTextField(20);
+        JLabel dataNascitaLabel = new JLabel("Data di nascita (anno-mese-giorno):");
+        JTextField dataNascitaField = new JTextField(20);
+        JLabel codiceConLabel = new JLabel("Codice Contratto:");
+        JTextField codiceConField = new JTextField(20);
 
-        okBtn = new JButton("OK");
+        JButton okBtn = new JButton("OK");
 
         impMainPanel.add(cfLabel);
         impMainPanel.add(cfTextField);
@@ -92,25 +92,18 @@ public class AddImpiegatoGUI {
                     categoria = "Dirigente";
                 }
                 Period periodo = null;
-                if(dataNascita != null)
-                    periodo = Period.between(dataNascita_LD, dataAttuale_LD);
+
+                periodo = Period.between(dataNascita_LD, dataAttuale_LD);
 
                 int eta = periodo.getYears();
-                if(!cf.isEmpty() || !nome.isEmpty() || !cognome.isEmpty() || dataNascita != null ||
-                !codiceCon.isEmpty() || eta != 0) {
-                    try {
-                        controller.aggiungiImp(cf, nome, cognome, dataNascita, dataAttuale, codiceCon,
-                                merito, salario, categoria, eta);
-                        JOptionPane.showMessageDialog(null, "Inserimento avvenuto con successo! ", "Successo",
-                                JOptionPane.INFORMATION_MESSAGE);
-                        frame.dispose();
-                    } catch (SQLException ex) {
-                        JOptionPane.showMessageDialog(null, "Non puo' proseguire l'inserimento", "Errore",
-                                JOptionPane.INFORMATION_MESSAGE);
-                        frame.dispose();
-                    }
-                }else{
-                    JOptionPane.showMessageDialog(null, "Ci sono campi vuoti! ", "Errore",
+                try {
+                    controller.aggiungiImp(cf, nome, cognome, dataNascita, dataAttuale, codiceCon,
+                            merito, salario, categoria, eta);
+                    JOptionPane.showMessageDialog(null, "Inserimento avvenuto con successo! ", "Successo",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    frame.dispose();
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Non puo' proseguire l'inserimento", "Errore",
                             JOptionPane.INFORMATION_MESSAGE);
                     frame.dispose();
                 }

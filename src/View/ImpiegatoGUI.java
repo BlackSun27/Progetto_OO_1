@@ -2,6 +2,7 @@ package View;
 
 import Controller.Controller;
 import Model.Impiegato;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -11,7 +12,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.ObjectStreamException;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
@@ -29,9 +29,9 @@ public class ImpiegatoGUI {
     private JTable profileTable;
     private JPanel profilePanel;
 
-    public ImpiegatoGUI(Controller controller, JFrame prevFrame) {
-        impiegatoMainPanel = new JPanel();
-        profilePanel = new JPanel();
+    public ImpiegatoGUI(@NotNull Controller controller, JFrame prevFrame) {
+        JPanel impiegatoMainPanel = new JPanel();
+        JPanel profilePanel = new JPanel();
         frame = new JFrame("Impiegati");
         frame.setSize(1280, 720);
         frame.setResizable(false);
@@ -49,6 +49,9 @@ public class ImpiegatoGUI {
         int i = 0;
         for (Impiegato imp : impiegati) {
             String cf = imp.getCf();
+            /*
+            il controllo serve per dare una dimensione precisa e corretta per gli impiegati
+            */
             if (!cfSet.contains(cf)) {
                 cfSet.add(cf);
             }
@@ -76,7 +79,7 @@ public class ImpiegatoGUI {
             dtm.addRow(riga);
         }
 
-        impTable = new JTable();
+        JTable impTable = new JTable();
         impTable.setModel(dtm);
         impTable.setRowHeight(30);
         impTable.getTableHeader().setReorderingAllowed(false);
@@ -90,43 +93,39 @@ public class ImpiegatoGUI {
                 String selected_cf = "";
                 if (rigaSelezionata != -1)
                     selected_cf = impTable.getValueAt(rigaSelezionata, 0).toString();
-                profileTable = new JTable();
+                JTable profileTable = new JTable();
 
-                ArrayList<String> info = controller.getListaPromozioni(selected_cf);;
-                String lab = new String();
-                String prog = new String();
+                ArrayList<String> info = controller.getListaPromozioni(selected_cf);
+                String lab;
+                String prog;
                 int dim = info.size();
                 try {
                     lab = controller.getAfferenzeImp(selected_cf).get(0);
                     prog = controller.getProgettiImp(selected_cf).get(0);
                     dim++;
                 } catch (NullPointerException ex) {
-                    lab = "";
-                    prog = "";
+                    lab = null;
+                    prog = null;
                 }
 
 
                 Object[][] righe_pop;
-                int dim1 = 0;
-                if(lab!=null && prog!=null) {
-                    righe_pop = new Object[dim/2 + 1][2];
+                righe_pop = new Object[dim / 2 + 1][2];
+                if (lab != null && prog != null) {
                     righe_pop[0][0] = lab;
                     righe_pop[0][1] = prog;
-                    dim1++;
-                    for (int i = 0; i < dim/2 + 1; i++) {
-                        if (i + 1 < dim/2 + 1) {
-                            righe_pop[i+1][0] = info.get(2*i);
-                            righe_pop[i+1][1] = info.get(2*i + 1);
-                            dim1++;
+                    for (int i = 0; i < dim / 2 + 1; i++) {
+                        if (i + 1 < dim / 2 + 1 && 2 * i <= dim && 2 * i + 1 <= dim) {
+                            righe_pop[i + 1][0] = info.get(2 * i);
+                            righe_pop[i + 1][1] = info.get(2 * i + 1);
                         }
                     }
-                }else{
-                    righe_pop = new Object[dim/2 + 1][2];
-                    for (int i = 0; i < dim/2 + 1; i++) {
-                        if (i + 1 < dim) {
-                            righe_pop[i][0] = info.get(2*i);
-                            righe_pop[i][1] = info.get(2*i + 1);
-                            dim1++;
+                } else {
+                    righe_pop = new Object[dim / 2][2];
+                    for (int i = 0; i < dim / 2; i++) {
+                        if (2 * i <= dim && 2 * i + 1 <= dim) {
+                            righe_pop[i][0] = info.get(2 * i);
+                            righe_pop[i][1] = info.get(2 * i + 1);
                         }
                     }
                 }
@@ -165,14 +164,14 @@ public class ImpiegatoGUI {
 
             }
         });
-        jsp = new JScrollPane(impTable);
+        JScrollPane jsp = new JScrollPane(impTable);
         jsp.setPreferredSize(new Dimension(800, 500));
-        addBtn = new JButton("Aggiungi");
-        removeBtn = new JButton("Rimuovi");
-        promuoviBtn = new JButton("Promuovi");
-        backBtn = new JButton("Torna alla Home");
+        JButton addBtn = new JButton("Aggiungi");
+        JButton removeBtn = new JButton("Rimuovi");
+        JButton promuoviBtn = new JButton("Promuovi");
+        JButton backBtn = new JButton("Torna alla Home");
 
-        btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         btnPanel.add(addBtn);
         btnPanel.add(removeBtn);
         btnPanel.add(promuoviBtn);
@@ -228,29 +227,35 @@ public class ImpiegatoGUI {
         });
 
         removeBtn.addActionListener(e -> {
-            String selected_cf = impTable.getValueAt(impTable.getSelectedRow(), 0).toString();
-
-            int selection = JOptionPane.showConfirmDialog(null, "Sicuro di voler licenziare " +
-                    "l'impiegato?", "Conferma", JOptionPane.YES_NO_OPTION);
-            if (selection == JOptionPane.YES_OPTION) {
-                try {
-                    controller.rimuoviImp(selected_cf);
-                    JOptionPane.showMessageDialog(null, "Eliminazione eseguita correttamente!",
-                            "Successo", JOptionPane.INFORMATION_MESSAGE);
-                    ricaricaTabella(controller, colonne);
-                } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, "Impossibile rimuovere l'impiegato! Motivo: " +
-                            ex.toString(), "Insuccesso", JOptionPane.PLAIN_MESSAGE);
+            String selected_cf = "";
+            try {
+                selected_cf = impTable.getValueAt(impTable.getSelectedRow(), 0).toString();
+                int selection = JOptionPane.showConfirmDialog(null, "Sicuro di voler licenziare " +
+                        "l'impiegato?", "Conferma", JOptionPane.YES_NO_OPTION);
+                if (selection == JOptionPane.YES_OPTION) {
+                    try {
+                        controller.rimuoviImp(selected_cf);
+                        JOptionPane.showMessageDialog(null, "Eliminazione eseguita correttamente!",
+                                "Successo", JOptionPane.INFORMATION_MESSAGE);
+                        ricaricaTabella(controller, colonne);
+                    } catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(null, "Impossibile rimuovere l'impiegato! Motivo: " +
+                                ex, "Insuccesso", JOptionPane.PLAIN_MESSAGE);
+                    }
                 }
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                JOptionPane.showMessageDialog(null, "Non e' stato selezionato nessun cf!", "Insuccesso",
+                        JOptionPane.PLAIN_MESSAGE);
             }
         });
 
         promuoviBtn.addActionListener(e -> {
-            int selezione = JOptionPane.showConfirmDialog(null, "L'attuale impiegato ha merito per diventare " +
-                    "dirigente?", "Conferma", JOptionPane.YES_NO_OPTION);
-
-            if (selezione == JOptionPane.YES_OPTION) {
+            try {
                 String selected_cf = impTable.getValueAt(impTable.getSelectedRow(), 0).toString();
+                int selezione = JOptionPane.showConfirmDialog(null, "L'attuale impiegato ha merito per diventare " +
+                        "dirigente?", "Conferma", JOptionPane.YES_NO_OPTION);
+                //la seguente variabile dipende dalla scelta dell'utente, sarà false se l'utente sceglie no
+                //sarà true se l'utente sceglie sì
                 boolean merito = selezione == JOptionPane.YES_OPTION;
                 if (merito) {
                     try {
@@ -260,7 +265,7 @@ public class ImpiegatoGUI {
                         ricaricaTabella(controller, colonne);
                     } catch (SQLException ex) {
                         JOptionPane.showMessageDialog(null, "Impossibile promuovere l'impiegato! Motivo: " +
-                                ex.toString(), "Insuccesso", JOptionPane.PLAIN_MESSAGE);
+                                ex, "Insuccesso", JOptionPane.PLAIN_MESSAGE);
                     }
                 } else {
                     try {
@@ -271,9 +276,12 @@ public class ImpiegatoGUI {
                         ricaricaTabella(controller, colonne);
                     } catch (SQLException ex) {
                         JOptionPane.showMessageDialog(null, "Impossibile promuovere l'impiegato! Motivo: " +
-                                ex.toString(), "Insuccesso", JOptionPane.PLAIN_MESSAGE);
+                                ex, "Insuccesso", JOptionPane.PLAIN_MESSAGE);
                     }
                 }
+            } catch (ArrayIndexOutOfBoundsException ex) {
+                JOptionPane.showMessageDialog(null, "Non e' stato selezionato nessun cf!", "Insuccesso",
+                        JOptionPane.PLAIN_MESSAGE);
             }
         });
     }
@@ -285,12 +293,15 @@ public class ImpiegatoGUI {
             Set<String> cfSet = new HashSet<>();
             for (Impiegato imp : impiegati) {
                 String cf = imp.getCf();
+                /*
+                il controllo serve per dare una dimensione precisa e corretta per gli impiegati
+                */
                 if (!cfSet.contains(cf)) {
                     cfSet.add(cf);
                 }
             }
 
-            Object[][] righe = new Object[cfSet.size()][9];
+            @SuppressWarnings("MismatchedReadAndWriteOfArray") Object[][] righe = new Object[cfSet.size()][9];
             int i = 0;
             for (; i < cfSet.size(); i++) {
                 Impiegato imp = impiegati.get(i);

@@ -17,7 +17,7 @@ public class AddLaboratorioGUI {
     private JButton okBtn;
 
     public AddLaboratorioGUI(Controller controller){
-        laboratorioPanel = new JPanel();
+        JPanel laboratorioPanel = new JPanel();
         laboratorioPanel.setLayout(new BoxLayout(laboratorioPanel, BoxLayout.Y_AXIS));
         frame = new JFrame("Inserimento laboratorio");
         frame.setContentPane(laboratorioPanel);
@@ -26,12 +26,12 @@ public class AddLaboratorioGUI {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        nomeLabel = new JLabel("Nome: ");
-        nomeTextField = new JTextField(20);
-        resp_sciLabel = new JLabel("CF Responsabile Scientifico: ");
-        resp_sciField = new JTextField(20);
-        topicLabel = new JLabel("Topic: ");
-        topicField = new JTextField(60);
+        JLabel nomeLabel = new JLabel("Nome: ");
+        JTextField nomeTextField = new JTextField(20);
+        JLabel resp_sciLabel = new JLabel("CF Responsabile Scientifico: ");
+        JTextField resp_sciField = new JTextField(20);
+        JLabel topicLabel = new JLabel("Topic: ");
+        JTextField topicField = new JTextField(60);
 
         laboratorioPanel.add(nomeLabel);
         laboratorioPanel.add(nomeTextField);
@@ -40,7 +40,7 @@ public class AddLaboratorioGUI {
         laboratorioPanel.add(topicLabel);
         laboratorioPanel.add(topicField);
 
-        okBtn = new JButton("OK");
+        JButton okBtn = new JButton("OK");
         laboratorioPanel.add(okBtn);
 
         okBtn.addActionListener(e -> {
@@ -58,7 +58,7 @@ public class AddLaboratorioGUI {
                         frame.dispose();
                     } catch (SQLException ex) {
                         JOptionPane.showMessageDialog(null, "Non posso effettuare l'inserimento" +
-                                " motivo: "+ ex.toString(), "Insuccesso", JOptionPane.PLAIN_MESSAGE);
+                                " motivo: "+ ex, "Insuccesso", JOptionPane.PLAIN_MESSAGE);
                         frame.dispose();
                     }
                 }else{

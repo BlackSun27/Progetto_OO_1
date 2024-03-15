@@ -7,10 +7,10 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class ImplementazioneImpiegatoDAO implements ImpiegatoDAO {
-    private DbConn db;
+    //private DbConn db;
     private Connection c;
     public ImplementazioneImpiegatoDAO(){
-        db = new DbConn();
+        DbConn db = new DbConn();
         try{
             c = db.conn_db("postgres", "postgres", "Blacks_27");
         } catch (SQLException e){
