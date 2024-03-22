@@ -15,7 +15,13 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
 
+/**
+ * The type Laboratorio gui.
+ */
 public class LaboratorioGUI {
+    /**
+     * The Frame.
+     */
     JFrame frame;
     private JPanel laboratorioMainPanel;
     private JButton backBtn;
@@ -31,6 +37,12 @@ public class LaboratorioGUI {
     private JLabel afferenteLabel;
     private JPanel afferenteAddPanel;
 
+    /**
+     * Instantiates a new Laboratorio gui.
+     *
+     * @param controller the controller
+     * @param prevFrame  the prev frame
+     */
     public LaboratorioGUI(Controller controller, JFrame prevFrame){
         JPanel laboratorioMainPanel = new JPanel();
         JPanel profilePanel = new JPanel();

@@ -6,9 +6,16 @@ import DAO.ImpiegatoDAO;
 import java.sql.*;
 import java.util.ArrayList;
 
+/**
+ * The type Implementazione impiegato dao.
+ */
 public class ImplementazioneImpiegatoDAO implements ImpiegatoDAO {
     //private DbConn db;
     private Connection c;
+
+    /**
+     * Instantiates a new Implementazione impiegato dao.
+     */
     public ImplementazioneImpiegatoDAO(){
         DbConn db = new DbConn();
         try{

@@ -16,7 +16,13 @@ import java.util.*;
 import java.util.List;
 
 
+/**
+ * The type Progetto gui.
+ */
 public class ProgettoGUI {
+    /**
+     * The Frame.
+     */
     JFrame frame;
     private JPanel progettoMainPanel;
     private JButton backBtn;
@@ -32,6 +38,12 @@ public class ProgettoGUI {
     private JLabel laboratorioLabel;
     private JPanel laboratorioAddPanel;
 
+    /**
+     * Instantiates a new Progetto gui.
+     *
+     * @param controller the controller
+     * @param prevFrame  the prev frame
+     */
     public ProgettoGUI(Controller controller, Frame prevFrame){
         JPanel progettoMainPanel = new JPanel();
         JPanel profilePanel = new JPanel();

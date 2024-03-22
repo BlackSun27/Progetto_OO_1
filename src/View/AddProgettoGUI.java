@@ -5,7 +5,13 @@ import Controller.*;
 import javax.swing.*;
 import java.sql.*;
 
+/**
+ * The type Add progetto gui.
+ */
 public class AddProgettoGUI {
+    /**
+     * The Frame.
+     */
     public JFrame frame;
     private JPanel progettoPanel;
     private JTextField resp_sciField;
@@ -20,6 +26,11 @@ public class AddProgettoGUI {
     private JLabel refSciLabel;
     private JButton okBtn;
 
+    /**
+     * Instantiates a new Add progetto gui.
+     *
+     * @param controller the controller
+     */
     public AddProgettoGUI(Controller controller){
         JPanel progettoPanel = new JPanel();
         progettoPanel.setLayout(new BoxLayout(progettoPanel, BoxLayout.Y_AXIS));

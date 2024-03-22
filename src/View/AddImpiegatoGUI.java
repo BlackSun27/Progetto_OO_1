@@ -9,7 +9,13 @@ import java.time.format.DateTimeFormatter;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
+/**
+ * The type Add impiegato gui.
+ */
 public class AddImpiegatoGUI {
+    /**
+     * The Frame.
+     */
     public JFrame frame;
     private JPanel impMainPanel;
     private JTextField cfTextField;
@@ -24,6 +30,11 @@ public class AddImpiegatoGUI {
     private JLabel codiceConLabel;
     private JButton okBtn;
 
+    /**
+     * Instantiates a new Add impiegato gui.
+     *
+     * @param controller the controller
+     */
     public AddImpiegatoGUI(Controller controller){
         JPanel impMainPanel = new JPanel();
         impMainPanel.setLayout(new BoxLayout(impMainPanel, BoxLayout.Y_AXIS));

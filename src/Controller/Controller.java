@@ -8,6 +8,9 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.*;
 
+/**
+ * The type Controller.
+ */
 public class Controller {
     //l_ prima di ogni variabile fa riferimento al fatto che sia una lista,
     // esempio: l_Impiegati = lista impiegati
@@ -16,6 +19,9 @@ public class Controller {
     private final List<Laboratorio> l_Laboratori = new ArrayList<>();
     private final List<Progetto> l_Progetti = new ArrayList<>();
 
+    /**
+     * Instantiates a new Controller.
+     */
     public Controller(){
         getImpiegatiDB();
         getLaboratoriDB();
@@ -23,6 +29,11 @@ public class Controller {
         getProgettiDB();
     }
 
+    /**
+     * Get impiegati db list.
+     *
+     * @return the list
+     */
     public List<Impiegato> getImpiegatiDB(){
         GestionaleDAO gestionaleDAO = new ImplementazioneGestionaleDAO();
 
@@ -57,6 +68,11 @@ public class Controller {
         return l_Impiegati;
     }
 
+    /**
+     * Get laboratori db list.
+     *
+     * @return the list
+     */
     public List<Laboratorio> getLaboratoriDB(){
         GestionaleDAO gestionaleDAO = new ImplementazioneGestionaleDAO();
 
@@ -75,6 +91,11 @@ public class Controller {
         return l_Laboratori;
     }
 
+    /**
+     * Get promozioni db list.
+     *
+     * @return the list
+     */
     public List<Promozione> getPromozioniDB(){
         GestionaleDAO gestionaleDAO = new ImplementazioneGestionaleDAO();
 
@@ -94,6 +115,11 @@ public class Controller {
         return l_Promozioni;
     }
 
+    /**
+     * Get progetti db list.
+     *
+     * @return the list
+     */
     public List<Progetto> getProgettiDB(){
         GestionaleDAO gestionaleDAO = new ImplementazioneGestionaleDAO();
 
@@ -114,7 +140,12 @@ public class Controller {
         return l_Progetti;
     }
 
-    //METODI PER SVILUPPARE LA GUI DI IMPIEGATO
+    /**
+     * Get lista cf array list.
+     *
+     * @return the array list
+     */
+//METODI PER SVILUPPARE LA GUI DI IMPIEGATO
     public ArrayList<String> getListaCF(){
         ArrayList<String> l_CF = new ArrayList<>();
 
@@ -124,6 +155,11 @@ public class Controller {
         return l_CF;
     }
 
+    /**
+     * Get lista nomi imp array list.
+     *
+     * @return the array list
+     */
     public ArrayList<String> getListaNomiImp(){
         ArrayList<String> l_Nomi = new ArrayList<>();
 
@@ -133,6 +169,11 @@ public class Controller {
         return l_Nomi;
     }
 
+    /**
+     * Get lista cognomi array list.
+     *
+     * @return the array list
+     */
     public ArrayList<String> getListaCognomi(){
         ArrayList<String> l_Cognomi = new ArrayList<>();
 
@@ -142,6 +183,12 @@ public class Controller {
         return l_Cognomi;
     }
 
+    /**
+     * Get lista promozioni array list.
+     *
+     * @param cf the cf
+     * @return the array list
+     */
     public ArrayList<String> getListaPromozioni(String cf){
         ArrayList<String> promozioni = new ArrayList<>();
         ArrayList<Date> date = new ArrayList<>();
@@ -161,6 +208,12 @@ public class Controller {
         return info;
     }
 
+    /**
+     * Get afferenze imp array list.
+     *
+     * @param cf the cf
+     * @return the array list
+     */
     public ArrayList<String> getAfferenzeImp(String cf){
         ImpiegatoDAO impiegatoDAO = new ImplementazioneImpiegatoDAO();
 
@@ -184,6 +237,12 @@ public class Controller {
         return null;
     }
 
+    /**
+     * Get progetti imp array list.
+     *
+     * @param cf the cf
+     * @return the array list
+     */
     public ArrayList<String> getProgettiImp(String cf){
         ImpiegatoDAO impiegatoDAO = new ImplementazioneImpiegatoDAO();
 
@@ -207,6 +266,21 @@ public class Controller {
         return null;
     }
 
+    /**
+     * Aggiungi imp.
+     *
+     * @param cf             the cf
+     * @param nome           the nome
+     * @param cognome        the cognome
+     * @param dataNascita    the data nascita
+     * @param dataAssunzione the data assunzione
+     * @param codiceCon      the codice con
+     * @param merito         the merito
+     * @param salario        the salario
+     * @param categoria      the categoria
+     * @param eta            the eta
+     * @throws SQLException the sql exception
+     */
     public void aggiungiImp(String cf, String nome, String cognome, Date dataNascita, Date dataAssunzione,
                             String codiceCon, boolean merito, float salario, String categoria, int eta) throws SQLException {
 
@@ -224,6 +298,12 @@ public class Controller {
         getImpiegatiDB();
     }
 
+    /**
+     * Rimuovi imp.
+     *
+     * @param cf the cf
+     * @throws SQLException the sql exception
+     */
     public void rimuoviImp(String cf) throws SQLException {
         ImpiegatoDAO impiegatoDAO = new ImplementazioneImpiegatoDAO();
 
@@ -232,6 +312,13 @@ public class Controller {
         l_Impiegati.removeIf(i -> i.getCf().equals(cf));
     }
 
+    /**
+     * Promuovi imp.
+     *
+     * @param cf     the cf
+     * @param merito the merito
+     * @throws SQLException the sql exception
+     */
     public void promuoviImp(String cf, boolean merito) throws SQLException {
         ImpiegatoDAO impiegatoDAO = new ImplementazioneImpiegatoDAO();
 
@@ -241,7 +328,12 @@ public class Controller {
         getImpiegatiDB();
     }
 
-    //METODI PER SVILUPPARE LA GUI DI LABORATORIO
+    /**
+     * Get lista nomi lab array list.
+     *
+     * @return the array list
+     */
+//METODI PER SVILUPPARE LA GUI DI LABORATORIO
     public ArrayList<String> getListaNomiLab(){
         ArrayList<String> l_Nomi = new ArrayList<>();
 
@@ -251,6 +343,11 @@ public class Controller {
         return l_Nomi;
     }
 
+    /**
+     * Get lista resp sci array list.
+     *
+     * @return the array list
+     */
     public ArrayList<String> getListaRespSci(){
         ArrayList<String> l_RespSci = new ArrayList<>();
 
@@ -260,6 +357,11 @@ public class Controller {
         return l_RespSci;
     }
 
+    /**
+     * Get lista topic lab array list.
+     *
+     * @return the array list
+     */
     public ArrayList<String> getListaTopicLab(){
         ArrayList<String> l_Topic = new ArrayList<>();
 
@@ -269,6 +371,11 @@ public class Controller {
         return l_Topic;
     }
 
+    /**
+     * Get lista n afferenti array list.
+     *
+     * @return the array list
+     */
     public ArrayList<Integer> getListaN_Afferenti(){
         ArrayList<Integer> l_Afferenti = new ArrayList<>();
 
@@ -278,6 +385,12 @@ public class Controller {
         return l_Afferenti;
     }
 
+    /**
+     * Gets resp sci lab.
+     *
+     * @param nome the nome
+     * @return the resp sci lab
+     */
     public ArrayList<String> getRespSciLab(String nome) {
         LaboratorioDAO laboratorioDAO = new ImplementazioneLaboratorioDAO();
 
@@ -301,6 +414,12 @@ public class Controller {
         return null;
     }
 
+    /**
+     * Gets afferenze lab.
+     *
+     * @param nome the nome
+     * @return the afferenze lab
+     */
     public ArrayList<String> getAfferenzeLab(String nome) {
         LaboratorioDAO laboratorioDAO = new ImplementazioneLaboratorioDAO();
 
@@ -323,6 +442,12 @@ public class Controller {
         return null;
     }
 
+    /**
+     * Gets cu pfrom lab.
+     *
+     * @param nome the nome
+     * @return the cu pfrom lab
+     */
     public String getCUPfromLab(String nome) {
         LaboratorioDAO laboratorioDAO = new ImplementazioneLaboratorioDAO();
 
@@ -346,6 +471,14 @@ public class Controller {
         return null;
     }
 
+    /**
+     * Aggiungi lab.
+     *
+     * @param nomeLab the nome lab
+     * @param respSci the resp sci
+     * @param topic   the topic
+     * @throws SQLException the sql exception
+     */
     public void aggiungiLab(String nomeLab, String respSci, String topic) throws SQLException {
         LaboratorioDAO laboratorioDAO = new ImplementazioneLaboratorioDAO();
 
@@ -355,6 +488,12 @@ public class Controller {
         getLaboratoriDB();
     }
 
+    /**
+     * Rimuovi lab.
+     *
+     * @param nome the nome
+     * @throws SQLException the sql exception
+     */
     public void rimuoviLab(String nome) throws SQLException {
         LaboratorioDAO laboratorioDAO = new ImplementazioneLaboratorioDAO();
 
@@ -363,6 +502,13 @@ public class Controller {
         l_Laboratori.removeIf(l -> l.getNome().equals(nome));
     }
 
+    /**
+     * Aggiungi afferente lab.
+     *
+     * @param nome the nome
+     * @param cf   the cf
+     * @throws SQLException the sql exception
+     */
     public void aggiungiAfferenteLab(String nome, String cf) throws SQLException {
         LaboratorioDAO laboratorioDAO = new ImplementazioneLaboratorioDAO();
 
@@ -372,7 +518,12 @@ public class Controller {
         getLaboratoriDB();
     }
 
-    //METODI PER SVILUPPARE LA GUI DI PROGETTO
+    /**
+     * Get lista cup array list.
+     *
+     * @return the array list
+     */
+//METODI PER SVILUPPARE LA GUI DI PROGETTO
     public ArrayList<String> getListaCUP(){
         ArrayList<String> l_CUP = new ArrayList<>();
 
@@ -382,6 +533,11 @@ public class Controller {
         return l_CUP;
     }
 
+    /**
+     * Get lista ref sci array list.
+     *
+     * @return the array list
+     */
     public ArrayList<String> getListaRefSci(){
         ArrayList<String> l_RefSci = new ArrayList<>();
 
@@ -391,6 +547,11 @@ public class Controller {
         return l_RefSci;
     }
 
+    /**
+     * Get lista resp array list.
+     *
+     * @return the array list
+     */
     public ArrayList<String> getListaResp(){
         ArrayList<String> l_Resp = new ArrayList<>();
 
@@ -400,6 +561,11 @@ public class Controller {
         return l_Resp;
     }
 
+    /**
+     * Get lista nomi prog array list.
+     *
+     * @return the array list
+     */
     public ArrayList<String> getListaNomiProg(){
         ArrayList<String> l_Nomi = new ArrayList<>();
 
@@ -409,6 +575,12 @@ public class Controller {
         return l_Nomi;
     }
 
+    /**
+     * Gets lab from cup.
+     *
+     * @param cup the cup
+     * @return the lab from cup
+     */
     public ArrayList<String> getLabFromCUP(String cup) {
         ProgettoDAO progettoDAO = new ImplementazioneProgettoDAO();
 
@@ -430,6 +602,12 @@ public class Controller {
         return l_Lab;
     }
 
+    /**
+     * Get info ref resp array list.
+     *
+     * @param cup the cup
+     * @return the array list
+     */
     public ArrayList<String> getInfoRefResp(String cup){
         ProgettoDAO progettoDAO = new ImplementazioneProgettoDAO();
 
@@ -449,6 +627,16 @@ public class Controller {
         return null;
     }
 
+    /**
+     * Aggiungi progetto.
+     *
+     * @param cup    the cup
+     * @param refSci the ref sci
+     * @param resp   the resp
+     * @param nome   the nome
+     * @param budget the budget
+     * @throws SQLException the sql exception
+     */
     public void aggiungiProgetto(String cup, String refSci, String resp, String nome, float budget)
         throws SQLException{
         ProgettoDAO progettoDAO = new ImplementazioneProgettoDAO();
@@ -459,6 +647,12 @@ public class Controller {
         getProgettiDB();
     }
 
+    /**
+     * Rimuovi progetto.
+     *
+     * @param cup the cup
+     * @throws SQLException the sql exception
+     */
     public void rimuoviProgetto(String cup) throws SQLException{
         ProgettoDAO progettoDAO = new ImplementazioneProgettoDAO();
 
@@ -467,6 +661,13 @@ public class Controller {
         l_Progetti.removeIf(p -> p.getCup().equals(cup));
     }
 
+    /**
+     * Aggiungi laboratorio.
+     *
+     * @param cup     the cup
+     * @param nomelab the nomelab
+     * @throws SQLException the sql exception
+     */
     public void aggiungiLaboratorio(String cup, String nomelab) throws SQLException{
         ProgettoDAO progettoDAO = new ImplementazioneProgettoDAO();
 
