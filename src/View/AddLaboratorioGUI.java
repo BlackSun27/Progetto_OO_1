@@ -5,7 +5,13 @@ import Controller.*;
 import javax.swing.*;
 import java.sql.*;
 
+/**
+ * The type Add laboratorio gui.
+ */
 public class AddLaboratorioGUI {
+    /**
+     * The Frame.
+     */
     public JFrame frame;
     private JPanel laboratorioPanel;
     private JTextField resp_sciField;
@@ -16,6 +22,11 @@ public class AddLaboratorioGUI {
     private JLabel topicLabel;
     private JButton okBtn;
 
+    /**
+     * Instantiates a new Add laboratorio gui.
+     *
+     * @param controller the controller
+     */
     public AddLaboratorioGUI(Controller controller){
         JPanel laboratorioPanel = new JPanel();
         laboratorioPanel.setLayout(new BoxLayout(laboratorioPanel, BoxLayout.Y_AXIS));

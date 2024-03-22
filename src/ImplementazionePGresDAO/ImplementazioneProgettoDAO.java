@@ -10,9 +10,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * The type Implementazione progetto dao.
+ */
 public class ImplementazioneProgettoDAO implements ProgettoDAO {
     //private DbConn db;
     private Connection c;
+
+    /**
+     * Instantiates a new Implementazione progetto dao.
+     */
     public ImplementazioneProgettoDAO() {
         DbConn db = new DbConn();
         try {

@@ -16,9 +16,15 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
 
+/**
+ * The type Impiegato gui.
+ */
 public class ImpiegatoGUI {
     private JPanel impiegatoMainPanel;
     private JButton backBtn;
+    /**
+     * The Frame.
+     */
     JFrame frame;
     private JButton addBtn;
     private JButton removeBtn;
@@ -29,6 +35,12 @@ public class ImpiegatoGUI {
     private JTable profileTable;
     private JPanel profilePanel;
 
+    /**
+     * Instantiates a new Impiegato gui.
+     *
+     * @param controller the controller
+     * @param prevFrame  the prev frame
+     */
     public ImpiegatoGUI(@NotNull Controller controller, JFrame prevFrame) {
         JPanel impiegatoMainPanel = new JPanel();
         JPanel profilePanel = new JPanel();

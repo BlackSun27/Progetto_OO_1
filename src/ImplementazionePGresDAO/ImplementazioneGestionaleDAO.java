@@ -6,10 +6,22 @@ import DAO.GestionaleDAO;
 import java.sql.*;
 import java.util.ArrayList;
 
+/**
+ * The type Implementazione gestionale dao.
+ */
 public class ImplementazioneGestionaleDAO implements GestionaleDAO {
+    /**
+     * The Db.
+     */
     DbConn db = new DbConn();
+    /**
+     * The C.
+     */
     Connection c = null;
 
+    /**
+     * Instantiates a new Implementazione gestionale dao.
+     */
     public ImplementazioneGestionaleDAO(){
         try{
             c = db.conn_db("postgres", "postgres", "Blacks_27");

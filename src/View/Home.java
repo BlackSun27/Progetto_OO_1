@@ -6,11 +6,17 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 
+/**
+ * The type Home.
+ */
 public class Home {
 
     private JPanel mainPanel;
     private JPanel btnPanel;
 
+    /**
+     * Instantiates a new Home.
+     */
     public Home(){
         Controller controller = new Controller();
 

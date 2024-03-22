@@ -9,9 +9,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * The type Implementazione laboratorio dao.
+ */
 public class ImplementazioneLaboratorioDAO implements LaboratorioDAO {
     //private DbConn db;
     private Connection c;
+
+    /**
+     * Instantiates a new Implementazione laboratorio dao.
+     */
     public ImplementazioneLaboratorioDAO() {
         DbConn db = new DbConn();
         try {
